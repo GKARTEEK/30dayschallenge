@@ -143,7 +143,7 @@ path(
 ),
 
 path(
-    'payment-success/<int:course_id>/',
+    'payment-success/',
     payment_success,
     name='payment_success'
 ),

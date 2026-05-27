@@ -608,9 +608,16 @@ def profile_page(request):
 # =========================
 # PAYMENT PAGE
 # =========================
-
 @login_required(login_url='login')
-def payment_page(request, course_id):
+def payment_page(request):
+
+    # =========================
+    # GET COURSE ID
+    # =========================
+
+    course_id = request.GET.get(
+        'course_id'
+    )
 
     course = get_object_or_404(
         Course,
@@ -618,7 +625,7 @@ def payment_page(request, course_id):
     )
 
     # =========================
-    # CHECK ALREADY PAID
+    # ALREADY PAID CHECK
     # =========================
 
     already_enrolled = Enrollment.objects.filter(
@@ -644,14 +651,6 @@ def payment_page(request, course_id):
     )
 
     # =========================
-    # SAVE USER SESSION
-    # =========================
-
-    request.session['payment_user_id'] = request.user.id
-    request.session['payment_course_id'] = course.id
-    request.session.modified = True
-
-    # =========================
     # RAZORPAY CLIENT
     # =========================
 
@@ -662,12 +661,14 @@ def payment_page(request, course_id):
         )
     )
 
+    # ₹1 TESTING
+
+    amount = 100
+
     # =========================
     # CREATE ORDER
     # =========================
 
-    #amount = int(course.price * 100)
-    amount = 100
     payment = client.order.create({
         "amount": amount,
         "currency": "INR",
@@ -692,9 +693,8 @@ def payment_page(request, course_id):
         'payment.html',
         context
     )
-
 @csrf_exempt
-def payment_success(request, course_id):
+def payment_success(request):
 
     # =========================
     # PAYMENT DETAILS
@@ -713,7 +713,7 @@ def payment_success(request, course_id):
     )
 
     # =========================
-    # GET ENROLLMENT USING ORDER ID
+    # GET ENROLLMENT
     # =========================
 
     enrollment = Enrollment.objects.filter(
@@ -749,8 +749,7 @@ def payment_success(request, course_id):
     except:
 
         return redirect(
-            'payment_page',
-            course_id=course.id
+            'payment_page'
         )
 
     # =========================
@@ -762,7 +761,7 @@ def payment_success(request, course_id):
     enrollment.save()
 
     # =========================
-    # LOGIN USER AGAIN
+    # LOGIN USER
     # =========================
 
     user.backend = (

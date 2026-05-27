@@ -152,8 +152,7 @@ var options = {
 
     "order_id": "{{ payment.id }}",
 
-    "callback_url": "https://30dayschallenge-production.up.railway.app/payment-success/{{ course.id }}/",
-
+    callback_url: "{{ request.scheme }}://{{ request.get_host }}{% url 'payment_success' %}",
     "redirect": true,
 
     "prefill": {

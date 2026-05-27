@@ -5,6 +5,8 @@ from django.shortcuts import (
 )
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import login
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
@@ -631,10 +633,13 @@ def payment_page(request, course_id):
         course=course
     )
 
-    # Store user id in session
+    # =========================
+    # SAVE USER IN SESSION
+    # =========================
+
     request.session['payment_user_id'] = request.user.id
     request.session['payment_course_id'] = course_id
-    request.session.save()
+    request.session.modified = True
 
     client = razorpay.Client(
         auth=(
@@ -657,10 +662,13 @@ def payment_page(request, course_id):
 
     return render(request, 'payment.html', context)
 
+
+# =========================
+# PAYMENT SUCCESS
+# =========================
+
 @csrf_exempt
 def payment_success(request, course_id):
-
-    from django.contrib.auth.models import User
 
     course = get_object_or_404(Course, id=course_id)
 
@@ -669,7 +677,7 @@ def payment_success(request, course_id):
     signature = request.POST.get('razorpay_signature') or request.GET.get('signature')
 
     # =========================
-    # GET USER FROM SESSION
+    # GET USER
     # =========================
 
     user = request.user
@@ -679,34 +687,15 @@ def payment_success(request, course_id):
         user_id = request.session.get('payment_user_id')
 
         if user_id:
+
             try:
                 user = User.objects.get(id=user_id)
             except User.DoesNotExist:
                 return redirect('login')
+
         else:
+
             return redirect('login')
-
-    # =========================
-    # VERIFY SIGNATURE
-    # =========================
-
-    try:
-
-        key_secret = settings.RAZORPAY_KEY_SECRET
-        msg = f"{order_id}|{payment_id}"
-
-        generated_signature = hmac.new(
-            key_secret.encode(),
-            msg.encode(),
-            hashlib.sha256
-        ).hexdigest()
-
-        if generated_signature != signature:
-            return render(request, 'payment_failed.html')
-
-    except Exception as e:
-
-        print(e)
 
     # =========================
     # SAVE ENROLLMENT
@@ -727,7 +716,6 @@ def payment_success(request, course_id):
 
     if not request.user.is_authenticated:
 
-        from django.contrib.auth import login
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
 

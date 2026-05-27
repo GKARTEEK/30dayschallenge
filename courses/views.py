@@ -693,77 +693,42 @@ def payment_page(request, course_id):
         context
     )
 
-
-# =========================
-# PAYMENT SUCCESS
-# =========================
-
 @csrf_exempt
 def payment_success(request, course_id):
 
-    course = get_object_or_404(
-        Course,
-        id=course_id
+    # =========================
+    # PAYMENT DETAILS
+    # =========================
+
+    payment_id = request.POST.get(
+        'razorpay_payment_id'
+    )
+
+    order_id = request.POST.get(
+        'razorpay_order_id'
+    )
+
+    signature = request.POST.get(
+        'razorpay_signature'
     )
 
     # =========================
-    # GET PAYMENT DETAILS
+    # GET ENROLLMENT USING ORDER ID
     # =========================
 
-    payment_id = (
-        request.POST.get('razorpay_payment_id')
-        or request.GET.get('razorpay_payment_id')
-    )
+    enrollment = Enrollment.objects.filter(
+        order_id=order_id
+    ).first()
 
-    order_id = (
-        request.POST.get('razorpay_order_id')
-        or request.GET.get('razorpay_order_id')
-    )
+    if not enrollment:
 
-    signature = (
-        request.POST.get('razorpay_signature')
-        or request.GET.get('razorpay_signature')
-    )
+        return redirect('courses')
+
+    user = enrollment.user
+    course = enrollment.course
 
     # =========================
-    # GET USER
-    # =========================
-
-    user = request.user
-
-    # SESSION LOST AFTER PAYMENT
-    if not user.is_authenticated:
-
-        user_id = request.session.get(
-            'payment_user_id'
-        )
-
-        if user_id:
-
-            try:
-
-                user = User.objects.get(
-                    id=user_id
-                )
-
-                # LOGIN USER AGAIN
-
-                user.backend = (
-                    'django.contrib.auth.backends.ModelBackend'
-                )
-
-                login(request, user)
-
-            except User.DoesNotExist:
-
-                return redirect('login')
-
-        else:
-
-            return redirect('login')
-
-    # =========================
-    # VERIFY PAYMENT SIGNATURE
+    # VERIFY PAYMENT
     # =========================
 
     client = razorpay.Client(
@@ -789,33 +754,25 @@ def payment_success(request, course_id):
         )
 
     # =========================
-    # SAVE ENROLLMENT
+    # SAVE PAYMENT
     # =========================
-
-    enrollment, created = Enrollment.objects.get_or_create(
-        user=user,
-        course=course
-    )
 
     enrollment.is_paid = True
     enrollment.payment_id = payment_id
-    enrollment.order_id = order_id
     enrollment.save()
 
     # =========================
-    # CLEAR SESSION
+    # LOGIN USER AGAIN
     # =========================
 
-    if 'payment_user_id' in request.session:
+    user.backend = (
+        'django.contrib.auth.backends.ModelBackend'
+    )
 
-        del request.session['payment_user_id']
-
-    if 'payment_course_id' in request.session:
-
-        del request.session['payment_course_id']
+    login(request, user)
 
     # =========================
-    # REDIRECT TO COURSE
+    # SUCCESS REDIRECT
     # =========================
 
     return redirect(

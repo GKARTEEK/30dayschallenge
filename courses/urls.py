@@ -140,7 +140,7 @@ path(
     'checkout/',
     views.payment_page,
     name='payment_page'
-)
+),
 
 path(
     'payment-success/<int:course_id>/',

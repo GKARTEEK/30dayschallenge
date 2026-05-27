@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        30DaysChallenge
+    </title>
+
+    <!-- GOOGLE FONT -->
+
+    <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+    >
+
+    <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+    >
+
+    <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+    >
+
+    <style>
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+
+    background:#111827;
+
+    margin-top:80px;
+
+    border-top:1px solid #1e293b;
+}
+
+.footer-container{
+
+    max-width:1400px;
+
+    margin:auto;
+
+    padding:60px 40px;
+
+    display:grid;
+
+    grid-template-columns:
+    2fr
+    1fr
+    1fr
+    1fr;
+
+    gap:40px;
+}
+
+.footer-brand h1{
+
+    font-size:36px;
+
+    margin-bottom:20px;
+}
+
+.footer-brand span{
+
+    color:#22c55e;
+}
+
+.footer-brand p{
+
+    color:#94a3b8;
+
+    line-height:1.8;
+
+    max-width:400px;
+}
+
+.footer-links{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+}
+
+.footer-links h2{
+
+    margin-bottom:10px;
+
+    font-size:22px;
+}
+
+.footer-links a{
+
+    text-decoration:none;
+
+    color:#cbd5e1;
+
+    transition:0.3s;
+}
+
+.footer-links a:hover{
+
+    color:#22c55e;
+}
+
+.footer-bottom{
+
+    border-top:1px solid #1e293b;
+
+    padding:20px;
+
+    text-align:center;
+
+    color:#64748b;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+
+    .footer-container{
+
+        grid-template-columns:1fr;
+
+        padding:40px 20px;
+    }
+}
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Inter',sans-serif;
+        }
+
+        body{
+            background:#0f172a;
+            color:white;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav{
+
+            width:100%;
+
+            height:90px;
+
+            background:#111827;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            padding:0 60px;
+
+            border-bottom:1px solid #1e293b;
+
+            position:sticky;
+
+            top:0;
+
+            z-index:1000;
+        }
+
+        /* =========================
+           LOGO
+        ========================= */
+
+        .logo{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:15px;
+        }
+
+        .circle{
+
+            width:52px;
+            height:52px;
+
+            background:#22c55e;
+
+            border-radius:50%;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            color:white;
+
+            font-size:22px;
+
+            font-weight:800;
+
+            box-shadow:
+            0 0 25px rgba(34,197,94,0.4);
+        }
+
+        .logo h1{
+
+            font-size:28px;
+
+            font-weight:800;
+
+            color:white;
+        }
+
+        .logo span{
+            color:#22c55e;
+        }
+
+        /* =========================
+           MENU
+        ========================= */
+
+        .menu{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:35px;
+        }
+
+        .menu a{
+
+            text-decoration:none;
+
+            color:#cbd5e1;
+
+            font-weight:500;
+
+            transition:0.3s;
+
+            position:relative;
+        }
+
+        .menu a:hover{
+            color:#22c55e;
+        }
+
+        .menu a::after{
+
+            content:'';
+
+            position:absolute;
+
+            left:0;
+            bottom:-6px;
+
+            width:0%;
+
+            height:2px;
+
+            background:#22c55e;
+
+            transition:0.3s;
+        }
+
+        .menu a:hover::after{
+            width:100%;
+        }
+
+        /* =========================
+           RIGHT NAV
+        ========================= */
+
+        .nav-right{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:20px;
+        }
+
+        /* =========================
+           XP BOX
+        ========================= */
+
+        .xp-box{
+
+            background:#1e293b;
+
+            padding:10px 18px;
+
+            border-radius:14px;
+
+            display:flex;
+
+            align-items:center;
+
+            gap:12px;
+        }
+
+        .xp-item{
+
+            color:#facc15;
+
+            font-size:14px;
+
+            font-weight:700;
+        }
+
+        .level-badge{
+
+            background:#22c55e;
+
+            color:white;
+
+            padding:6px 12px;
+
+            border-radius:999px;
+
+            font-size:13px;
+
+            font-weight:700;
+        }
+
+        /* =========================
+           PROFILE BUTTON
+        ========================= */
+
+        .profile-btn{
+
+            text-decoration:none;
+
+            display:flex;
+
+            align-items:center;
+
+            gap:10px;
+
+            background:#22c55e20;
+
+            color:#22c55e;
+
+            padding:10px 18px;
+
+            border-radius:14px;
+
+            font-weight:700;
+
+            transition:0.3s;
+        }
+
+        .profile-btn:hover{
+
+            background:#22c55e;
+
+            color:white;
+
+            transform:translateY(-2px);
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .login-btn{
+
+            color:white;
+
+            text-decoration:none;
+
+            font-weight:600;
+
+            transition:0.3s;
+        }
+
+        .login-btn:hover{
+            color:#22c55e;
+        }
+
+        .start-btn{
+
+            background:#22c55e;
+
+            color:white;
+
+            text-decoration:none;
+
+            padding:12px 24px;
+
+            border-radius:14px;
+
+            font-weight:700;
+
+            transition:0.3s;
+        }
+
+        .start-btn:hover{
+
+            background:#16a34a;
+
+            transform:translateY(-2px);
+        }
+
+        .logout-btn{
+
+            background:#ef4444;
+
+            color:white;
+
+            text-decoration:none;
+
+            padding:12px 24px;
+
+            border-radius:14px;
+
+            font-weight:700;
+
+            transition:0.3s;
+        }
+
+        .logout-btn:hover{
+
+            background:#dc2626;
+
+            transform:translateY(-2px);
+        }
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container{
+            padding:40px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width:1000px){
+
+            nav{
+                padding:0 20px;
+            }
+
+            .menu{
+                display:none;
+            }
+
+            .xp-box{
+                display:none;
+            }
+
+            .logo h1{
+                font-size:22px;
+            }
+
+            .container{
+                padding:20px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <nav>
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <div class="circle">
+                30
+            </div>
+
+            <h1>
+
+                Days<span>Challenge</span>
+
+            </h1>
+
+        </div>
+
+        <!-- MENU -->
+
+        <div class="menu">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/courses/">
+                Courses
+            </a>
+
+            <a href="/leaderboard/">
+                Leaderboard
+            </a>
+
+            <a href="/community/">
+                Community
+            </a>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="nav-right">
+
+            {% if user.is_authenticated %}
+
+                <!-- XP -->
+
+                <div class="xp-box">
+
+                    <div class="xp-item">
+
+                        ⭐
+                        {{ request.user.userprofile.xp }}
+                        XP
+
+                    </div>
+
+                    <div class="xp-item">
+
+                        🪙
+                        {{ request.user.userprofile.coins }}
+
+                    </div>
+
+                    <div class="level-badge">
+
+                        Level
+                        {{ request.user.userprofile.level }}
+
+                    </div>
+
+                </div>
+
+                <!-- PROFILE -->
+
+                <a
+                href="/profile/"
+                class="profile-btn"
+                >
+
+                    👤
+
+                    Hi,
+                    {{ user.username }}
+
+                </a>
+
+                <!-- LOGOUT -->
+
+                <a
+                href="/logout/"
+                class="logout-btn"
+                >
+
+                    Logout
+
+                </a>
+
+            {% else %}
+
+                <!-- LOGIN -->
+
+                <a
+                href="/login/"
+                class="login-btn"
+                >
+
+                    Login
+
+                </a>
+
+                <!-- SIGNUP -->
+
+                <a
+                href="/register/"
+                class="start-btn"
+                >
+
+                    Signup
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </nav>
+
+    <!-- =========================
+         PAGE CONTENT
+    ========================= -->
+
+    <div class="container">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </div>
+
+
+    <!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <!-- LEFT -->
+
+        <div class="footer-brand">
+
+            <h1>
+
+                30<span>DaysChallenge</span>
+
+            </h1>
+
+            <p>
+
+                Learn coding daily, build consistency,
+                earn certificates, unlock badges,
+                and grow together 🚀
+
+            </p>
+
+        </div>
+
+        <!-- LINKS -->
+
+        <div class="footer-links">
+
+            <h2>
+                Quick Links
+            </h2>
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/courses/">
+                Courses
+            </a>
+
+            <a href="/leaderboard/">
+                Leaderboard
+            </a>
+
+            <a href="/community/">
+                Community
+            </a>
+
+        </div>
+
+        <!-- HELP -->
+
+        <div class="footer-links">
+
+            <h2>
+                Help
+            </h2>
+
+            <a href="#">
+                About Us
+            </a>
+
+            <a href="#">
+                Contact Us
+            </a>
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+            <a href="#">
+                Terms & Conditions
+            </a>
+
+        </div>
+
+        <!-- SOCIAL -->
+
+        <div class="footer-links">
+
+            <h2>
+                Connect
+            </h2>
+
+            <a
+            href="https://instagram.com/"
+            target="_blank"
+            >
+
+                📸 Instagram
+
+            </a>
+
+            <a
+            href="https://t.me/"
+            target="_blank"
+            >
+
+                💬 Telegram
+
+            </a>
+
+            <a
+            href="https://linkedin.com/"
+            target="_blank"
+            >
+
+                💼 LinkedIn
+
+            </a>
+
+            <a
+            href="mailto:support@30dayschallenge.com"
+            >
+
+                ✉ Email
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- BOTTOM -->
+
+    <div class="footer-bottom">
+
+        © 2026 30DaysChallenge.
+        All Rights Reserved 🚀
+
+    </div>
+
+</footer>
+
+</body>
+
+</html>

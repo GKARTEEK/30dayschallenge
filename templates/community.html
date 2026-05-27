@@ -1,0 +1,697 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.community-container{
+    max-width:1400px;
+    margin:auto;
+}
+
+/* HERO */
+
+.community-hero{
+
+    background:linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a
+    );
+
+    padding:60px;
+
+    border-radius:32px;
+
+    margin-bottom:40px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.community-hero::before{
+
+    content:'';
+
+    position:absolute;
+
+    width:300px;
+    height:300px;
+
+    background:rgba(255,255,255,0.08);
+
+    border-radius:50%;
+
+    top:-100px;
+    right:-100px;
+}
+
+.community-hero h1{
+
+    font-size:58px;
+
+    font-weight:800;
+
+    margin-bottom:20px;
+
+    position:relative;
+
+    z-index:2;
+}
+
+.community-hero p{
+
+    font-size:20px;
+
+    color:#ecfdf5;
+
+    line-height:1.8;
+
+    max-width:800px;
+
+    position:relative;
+
+    z-index:2;
+}
+
+/* STATS */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+    margin-bottom:40px;
+}
+
+.stat-card{
+
+    background:#111827;
+
+    border-radius:24px;
+
+    padding:30px;
+
+    border:1px solid #1e293b;
+}
+
+.stat-card h2{
+
+    font-size:42px;
+
+    color:#22c55e;
+
+    margin-bottom:12px;
+}
+
+.stat-card p{
+
+    color:#94a3b8;
+}
+
+/* MAIN GRID */
+
+.main-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:30px;
+}
+
+/* POSTS */
+
+.posts-section{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:25px;
+}
+
+.post-card{
+
+    background:#111827;
+
+    border-radius:24px;
+
+    padding:30px;
+
+    border:1px solid #1e293b;
+}
+
+.post-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.user-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.avatar{
+
+    width:55px;
+    height:55px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:20px;
+
+    font-weight:700;
+}
+
+.username{
+
+    font-size:18px;
+
+    font-weight:700;
+}
+
+.post-time{
+
+    color:#94a3b8;
+
+    font-size:14px;
+}
+
+.post-content{
+
+    color:#e2e8f0;
+
+    line-height:1.9;
+
+    font-size:16px;
+
+    margin-bottom:25px;
+}
+
+/* ACTIONS */
+
+.post-actions{
+
+    display:flex;
+
+    gap:18px;
+
+    align-items:center;
+
+    margin-top:20px;
+}
+
+.like-btn{
+
+    text-decoration:none;
+
+    background:#22c55e20;
+
+    color:#22c55e;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+}
+
+.comment-count{
+
+    background:#1e293b;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    color:#cbd5e1;
+
+    font-weight:700;
+}
+
+/* COMMENTS */
+
+.comment-box{
+
+    margin-top:25px;
+
+    border-top:1px solid #1e293b;
+
+    padding-top:25px;
+}
+
+.comment-input{
+
+    width:100%;
+
+    padding:14px;
+
+    background:#0f172a;
+
+    border:1px solid #1e293b;
+
+    border-radius:14px;
+
+    color:white;
+
+    margin-bottom:15px;
+
+    outline:none;
+}
+
+.comment-btn{
+
+    background:#22c55e;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.comments-list{
+
+    margin-top:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+}
+
+.comment-card{
+
+    background:#0f172a;
+
+    padding:16px;
+
+    border-radius:14px;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:25px;
+}
+
+.side-card{
+
+    background:#111827;
+
+    border-radius:24px;
+
+    padding:30px;
+
+    border:1px solid #1e293b;
+}
+
+.top-user{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px 0;
+
+    border-bottom:1px solid #1e293b;
+}
+
+.top-user:last-child{
+
+    border-bottom:none;
+}
+
+.small-avatar{
+
+    width:42px;
+    height:42px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:700;
+}
+
+.create-btn{
+
+    width:100%;
+
+    background:#22c55e;
+
+    color:white;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:16px;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+textarea{
+
+    width:100%;
+
+    height:130px;
+
+    background:#0f172a;
+
+    color:white;
+
+    border:1px solid #1e293b;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    resize:none;
+
+    outline:none;
+}
+
+@media(max-width:1000px){
+
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+
+    .community-hero h1{
+        font-size:40px;
+    }
+}
+
+</style>
+
+<div class="community-container">
+
+    <!-- HERO -->
+
+    <div class="community-hero">
+
+        <h1>
+            Community Hub 🚀
+        </h1>
+
+        <p>
+            Connect with coders and grow together.
+        </p>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main-grid">
+
+        <!-- POSTS -->
+
+        <div class="posts-section">
+
+            <!-- CREATE POST -->
+
+            <div class="post-card">
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <textarea
+                    name="content"
+                    placeholder="Share something 🚀"
+                    ></textarea>
+
+                    <button
+                    type="submit"
+                    class="create-btn"
+                    style="margin-top:20px;"
+                    >
+
+                        + Create Post
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- POSTS -->
+
+            {% for post in posts %}
+
+            <div class="post-card">
+
+                <div class="post-header">
+
+                    <div class="user-info">
+
+                        <div class="avatar">
+
+                            {{ post.user.username|first|upper }}
+
+                        </div>
+
+                        <div>
+
+                            <div class="username">
+
+                                {{ post.user.username }}
+
+                            </div>
+
+                            <div class="post-time">
+
+                                {{ post.created_at }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="post-content">
+
+                    {{ post.content }}
+
+                </div>
+
+                <!-- ACTIONS -->
+
+                <div class="post-actions">
+
+                    <a
+                    href="/like-post/{{ post.id }}/"
+                    class="like-btn"
+                    >
+
+                        {% if post.id in liked_posts %}
+                            ❤️
+                        {% else %}
+                            🤍
+                        {% endif %}
+
+                        {{ post.likes }}
+
+                    </a>
+
+                    <div class="comment-count">
+
+                        💬 {{ post.comments.count }}
+
+                    </div>
+
+                </div>
+
+                <!-- COMMENTS -->
+
+                <div class="comment-box">
+
+                    <form
+                    method="POST"
+                    action="/add-comment/{{ post.id }}/"
+                    >
+
+                        {% csrf_token %}
+
+                        <input
+                        type="text"
+                        name="content"
+                        placeholder="Write a comment..."
+                        class="comment-input"
+                        >
+
+                        <button
+                        type="submit"
+                        class="comment-btn"
+                        >
+
+                            Comment
+
+                        </button>
+
+                    </form>
+
+                    <div class="comments-list">
+
+                        {% for comment in post.comments.all %}
+
+                        <div class="comment-card">
+
+                            <strong
+                            style="color:#22c55e;"
+                            >
+
+                                {{ comment.user.username }}
+
+                            </strong>
+
+                            <p
+                            style="
+                            margin-top:8px;
+                            color:#cbd5e1;
+                            "
+                            >
+
+                                {{ comment.content }}
+
+                            </p>
+
+                        </div>
+
+                        {% empty %}
+
+                        <p style="color:#64748b;">
+
+                            No comments yet
+
+                        </p>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- SIDEBAR -->
+
+        <div class="sidebar">
+
+            <div class="side-card">
+
+                <h2>
+                    🏆 Top Coders
+                </h2>
+
+                {% for profile in top_users %}
+
+                <div class="top-user">
+
+                    <div
+                    style="
+                    display:flex;
+                    align-items:center;
+                    gap:12px;
+                    "
+                    >
+
+                        <div class="small-avatar">
+
+                            {{ profile.user.username|first|upper }}
+
+                        </div>
+
+                        <div>
+
+                            {{ profile.user.username }}
+
+                        </div>
+
+                    </div>
+
+                    <div
+                    style="
+                    color:#22c55e;
+                    font-weight:700;
+                    "
+                    >
+
+                        {{ profile.xp }} XP
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

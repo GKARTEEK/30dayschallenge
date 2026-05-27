@@ -1,0 +1,1 @@
+web: gunicorn thirtydayschallenge.wsgi:application

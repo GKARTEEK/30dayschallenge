@@ -1,0 +1,392 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.page-title{
+
+    font-size:50px;
+
+    font-weight:800;
+
+    margin-bottom:40px;
+
+    text-align:center;
+}
+
+/* =========================
+   LEADERBOARD BOX
+========================= */
+
+.leaderboard-box{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    background:#111827;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    border:1px solid #1e293b;
+}
+
+.top-header{
+
+    background:linear-gradient(
+        90deg,
+        #22c55e,
+        #16a34a
+    );
+
+    padding:25px;
+
+    text-align:center;
+
+    font-size:28px;
+
+    font-weight:800;
+}
+
+/* =========================
+   USER ROW
+========================= */
+
+.user-row{
+
+    display:grid;
+
+    grid-template-columns:
+    100px
+    1.5fr
+    150px
+    150px
+    150px;
+
+    align-items:center;
+
+    padding:25px;
+
+    border-bottom:1px solid #1e293b;
+
+    transition:0.3s;
+}
+
+.user-row:hover{
+
+    background:#1e293b;
+}
+
+/* =========================
+   RANK
+========================= */
+
+.rank{
+
+    font-size:28px;
+
+    font-weight:800;
+
+    color:#22c55e;
+}
+
+/* =========================
+   USERNAME
+========================= */
+
+.user-section{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+}
+
+.username{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.you-badge{
+
+    background:#22c55e;
+
+    color:white;
+
+    padding:6px 14px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+}
+
+/* =========================
+   BADGES
+========================= */
+
+.badges{
+
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+}
+
+.badge{
+
+    background:#22c55e20;
+
+    color:#22c55e;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:13px;
+
+    font-weight:700;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stat{
+
+    text-align:center;
+}
+
+.stat h3{
+
+    font-size:24px;
+
+    color:#22c55e;
+}
+
+.stat p{
+
+    color:#94a3b8;
+
+    margin-top:5px;
+}
+
+/* =========================
+   TOP 3 COLORS
+========================= */
+
+.top-1{
+
+    background:rgba(255,215,0,0.08);
+}
+
+.top-2{
+
+    background:rgba(192,192,192,0.06);
+}
+
+.top-3{
+
+    background:rgba(205,127,50,0.06);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:950px){
+
+    .user-row{
+
+        grid-template-columns:1fr;
+
+        gap:25px;
+
+        text-align:center;
+    }
+
+    .user-section{
+
+        align-items:center;
+    }
+
+    .badges{
+
+        justify-content:center;
+    }
+
+    .page-title{
+
+        font-size:36px;
+    }
+}
+
+</style>
+
+<h1 class="page-title">
+
+    🏆 Leaderboard
+
+</h1>
+
+<div class="leaderboard-box">
+
+    <div class="top-header">
+
+        Top Coders 🚀
+
+    </div>
+
+    {% for profile in profiles %}
+
+    <div class="user-row
+
+    {% if forloop.counter == 1 %}
+        top-1
+    {% endif %}
+
+    {% if forloop.counter == 2 %}
+        top-2
+    {% endif %}
+
+    {% if forloop.counter == 3 %}
+        top-3
+    {% endif %}
+
+    ">
+
+        <!-- RANK -->
+
+        <div class="rank">
+
+            #{{ forloop.counter }}
+
+        </div>
+
+        <!-- USER SECTION -->
+
+        <div class="user-section">
+
+            <div class="username">
+
+                {{ profile.user.username }}
+
+                {% if profile.user == request.user %}
+
+                    <span class="you-badge">
+
+                        You
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+            <!-- BADGES -->
+
+            <div class="badges">
+
+                {% for badge in profile.badge_set.all %}
+
+                <div class="badge">
+
+                    {{ badge.icon }}
+                    {{ badge.title }}
+
+                </div>
+
+                {% empty %}
+
+                <div
+                style="
+                color:#64748b;
+                font-size:14px;
+                "
+                >
+
+                    No badges yet
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- XP -->
+
+        <div class="stat">
+
+            <h3>
+
+                ⭐ {{ profile.xp }}
+
+            </h3>
+
+            <p>
+
+                XP
+
+            </p>
+
+        </div>
+
+        <!-- LEVEL -->
+
+        <div class="stat">
+
+            <h3>
+
+                🔥 {{ profile.level }}
+
+            </h3>
+
+            <p>
+
+                Level
+
+            </p>
+
+        </div>
+
+        <!-- COMPLETED -->
+
+        <div class="stat">
+
+            <h3>
+
+                ✅ {{ profile.completed_lessons }}
+
+            </h3>
+
+            <p>
+
+                Completed
+
+            </p>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

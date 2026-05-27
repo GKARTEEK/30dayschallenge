@@ -1,0 +1,21 @@
+[33m232d696[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m fixed pricing route
+[33m3374c9b[m fixed pricing route
+[33m72e7a73[m fixed pricing route
+[33m0a69acf[m fixed pricing indentation
+[33mff560f2[m added pricing page
+[33md9a96fc[m connected railway postgres
+[33m73f44ed[m connected railway postgres
+[33ma65930b[m connected railway postgres
+[33m64b0a80[m connected railway postgres
+[33m0c29878[m connected railway postgres
+[33mda72e3e[m fixed csrf
+[33m1bfcccf[m fixed csrf
+[33m4b36867[m fixed csrf
+[33m2887004[m fixed csrf
+[33m001c5dc[m removed railpack
+[33m1ae13a6[m added railpack config
+[33m67833d5[m Update Procfile
+[33mf4794ec[m added procfile
+[33mbbc5dea[m deployment fixes
+[33m8b8f9dd[m fixed deployment
+[33mf4f71bc[m Initial commit

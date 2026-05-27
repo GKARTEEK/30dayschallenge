@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial;
+        }
+
+        body{
+            background:#f8fafc;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+        }
+
+        .card{
+            background:white;
+            padding:50px;
+            border-radius:24px;
+            width:420px;
+            text-align:center;
+            box-shadow:0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .logo{
+            font-size:22px;
+            font-weight:800;
+            color:#22c55e;
+            margin-bottom:30px;
+        }
+
+        .course-title{
+            font-size:26px;
+            font-weight:700;
+            color:#0f172a;
+            margin-bottom:20px;
+        }
+
+        .price-box{
+            margin:25px 0;
+        }
+
+        .original{
+            font-size:18px;
+            color:#94a3b8;
+            text-decoration:line-through;
+        }
+
+        .final{
+            font-size:52px;
+            font-weight:800;
+            color:#22c55e;
+        }
+
+        .features{
+            background:#f8fafc;
+            border-radius:16px;
+            padding:20px;
+            margin:25px 0;
+            text-align:left;
+        }
+
+        .features p{
+            color:#475569;
+            margin-bottom:10px;
+            font-size:15px;
+        }
+
+        .features p:last-child{
+            margin-bottom:0;
+        }
+
+        .pay-btn{
+            width:100%;
+            padding:18px;
+            background:#22c55e;
+            border:none;
+            border-radius:16px;
+            color:white;
+            font-size:20px;
+            font-weight:700;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .pay-btn:hover{
+            background:#16a34a;
+            transform:translateY(-2px);
+        }
+
+        .secure{
+            margin-top:18px;
+            color:#94a3b8;
+            font-size:13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="logo">
+        ⚡ 30DaysChallenge
+    </div>
+
+    <div class="course-title">
+        {{ course.title }}
+    </div>
+
+    <div class="price-box">
+        <div class="original">₹199</div>
+        <div class="final">₹1</div>
+    </div>
+
+    <div class="features">
+        <p>✅ 30 Days Full Access</p>
+        <p>✅ All Video Lessons</p>
+        <p>✅ Quizzes & Assignments</p>
+        <p>✅ XP, Badges & Certificate</p>
+    </div>
+
+    <button class="pay-btn" id="rzp-button">
+        Pay ₹1 & Enroll Now
+    </button>
+
+    <div class="secure">
+        🔒 Secure payment via Razorpay
+    </div>
+
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var options = {
+
+    "key": "{{ razorpay_key }}",
+
+    "amount": "{{ payment.amount }}",
+
+    "currency": "INR",
+
+    "name": "30DaysChallenge",
+
+    "description": "{{ course.title }}",
+
+    "order_id": "{{ payment.id }}",
+
+    "handler": function(response){
+        window.location.href =
+            "/payment-success/{{ course.id }}/?payment_id="
+            + response.razorpay_payment_id;
+    },
+
+    "prefill": {
+        "name": "{{ request.user.username }}",
+        "email": "{{ request.user.email }}"
+    },
+
+    "theme": {
+        "color": "#22c55e"
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById('rzp-button').onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+}
+</script>
+
+</body>
+</html>

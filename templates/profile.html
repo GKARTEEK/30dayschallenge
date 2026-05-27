@@ -1,0 +1,454 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.profile-container{
+    max-width:1400px;
+    margin:auto;
+}
+
+/* HERO */
+
+.profile-hero{
+
+    background:linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a
+    );
+
+    padding:50px;
+
+    border-radius:32px;
+
+    margin-bottom:40px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:30px;
+}
+
+.avatar{
+
+    width:120px;
+    height:120px;
+
+    background:white;
+
+    color:#22c55e;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:50px;
+
+    font-weight:800;
+}
+
+.hero-info h1{
+
+    font-size:50px;
+
+    margin-bottom:10px;
+}
+
+.hero-info p{
+
+    font-size:18px;
+
+    color:#ecfdf5;
+}
+
+/* GRID */
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:30px;
+}
+
+/* CARD */
+
+.card{
+
+    background:#111827;
+
+    border-radius:28px;
+
+    padding:30px;
+
+    border:1px solid #1e293b;
+}
+
+.card h2{
+
+    margin-bottom:25px;
+
+    font-size:28px;
+}
+
+/* STATS */
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(200px,1fr));
+
+    gap:20px;
+}
+
+.stat-box{
+
+    background:#0f172a;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    text-align:center;
+}
+
+.stat-box h1{
+
+    color:#22c55e;
+
+    font-size:40px;
+
+    margin-bottom:10px;
+}
+
+/* BADGES */
+
+.badges{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+}
+
+.badge{
+
+    background:#22c55e20;
+
+    color:#22c55e;
+
+    padding:12px 18px;
+
+    border-radius:999px;
+
+    font-weight:700;
+}
+
+/* POSTS */
+
+.post{
+
+    background:#0f172a;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    margin-bottom:18px;
+}
+
+/* CERTIFICATES */
+
+.certificate{
+
+    background:#0f172a;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    margin-bottom:18px;
+}
+
+.download-btn{
+
+    display:inline-block;
+
+    margin-top:12px;
+
+    background:#22c55e;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-weight:700;
+}
+
+@media(max-width:1000px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .profile-hero{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .hero-info h1{
+        font-size:36px;
+    }
+}
+
+</style>
+
+<div class="profile-container">
+
+    <!-- HERO -->
+
+    <div class="profile-hero">
+
+        <div class="avatar">
+
+            {{ request.user.username|first|upper }}
+
+        </div>
+
+        <div class="hero-info">
+
+            <h1>
+
+                {{ request.user.username }}
+
+            </h1>
+
+            <p>
+
+                🚀 Coding Enthusiast
+
+            </p>
+
+            <p>
+
+                🏆 Rank #{{ rank }}
+                out of {{ total_users }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- GRID -->
+
+    <div class="grid">
+
+        <!-- LEFT -->
+
+        <div
+        style="
+        display:flex;
+        flex-direction:column;
+        gap:30px;
+        "
+        >
+
+            <!-- STATS -->
+
+            <div class="card">
+
+                <h2>
+                    📊 Stats
+                </h2>
+
+                <div class="stats">
+
+                    <div class="stat-box">
+
+                        <h1>
+
+                            ⭐ {{ profile.xp }}
+
+                        </h1>
+
+                        <p>
+                            XP
+                        </p>
+
+                    </div>
+
+                    <div class="stat-box">
+
+                        <h1>
+
+                            🔥 {{ profile.level }}
+
+                        </h1>
+
+                        <p>
+                            Level
+                        </p>
+
+                    </div>
+
+                    <div class="stat-box">
+
+                        <h1>
+
+                            🪙 {{ profile.coins }}
+
+                        </h1>
+
+                        <p>
+                            Coins
+                        </p>
+
+                    </div>
+
+                    <div class="stat-box">
+
+                        <h1>
+
+                            ✅ {{ profile.completed_lessons }}
+
+                        </h1>
+
+                        <p>
+                            Completed
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- POSTS -->
+
+            <div class="card">
+
+                <h2>
+                    📝 Recent Posts
+                </h2>
+
+                {% for post in posts %}
+
+                <div class="post">
+
+                    {{ post.content }}
+
+                </div>
+
+                {% empty %}
+
+                <p style="color:#94a3b8;">
+
+                    No posts yet
+
+                </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div
+        style="
+        display:flex;
+        flex-direction:column;
+        gap:30px;
+        "
+        >
+
+            <!-- BADGES -->
+
+            <div class="card">
+
+                <h2>
+                    🥇 Badges
+                </h2>
+
+                <div class="badges">
+
+                    {% for badge in badges %}
+
+                    <div class="badge">
+
+                        {{ badge.icon }}
+                        {{ badge.title }}
+
+                    </div>
+
+                    {% empty %}
+
+                    <p style="color:#94a3b8;">
+
+                        No badges yet
+
+                    </p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            <!-- CERTIFICATES -->
+
+            <div class="card">
+
+                <h2>
+                    📜 Certificates
+                </h2>
+
+                {% for course in certificates %}
+
+                <div class="certificate">
+
+                    <h3>
+
+                        {{ course.course.title }}
+
+                    </h3>
+
+                    <a
+                    href="/certificate/{{ course.course.id }}/"
+                    class="download-btn"
+                    >
+
+                        Complete course and Download Certificate
+
+                    </a>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,633 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+.lesson-header{
+    background:linear-gradient(135deg,#111827,#1e293b);
+    padding:40px;
+    border-radius:25px;
+    margin-bottom:30px;
+}
+
+.day-badge{
+    background:#22c55e;
+    color:white;
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:30px;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+.lesson-title{
+    font-size:45px;
+    margin-bottom:15px;
+}
+
+.lesson-description{
+    color:#94a3b8;
+    font-size:18px;
+    line-height:1.7;
+}
+
+.progress-section{
+    background:#111827;
+    padding:20px;
+    border-radius:18px;
+    margin-bottom:30px;
+}
+
+.progress-bar{
+    height:10px;
+    background:#1e293b;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:12px;
+}
+
+.progress-fill{
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        #22c55e,
+        #16a34a
+    );
+}
+
+.content-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:30px;
+}
+
+.video-section{
+    background:#111827;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.video-thumbnail{
+    width:100%;
+}
+
+.video-info{
+    padding:25px;
+}
+
+.watch-btn{
+    display:inline-block;
+    margin-top:20px;
+    background:#22c55e;
+    color:white;
+    padding:14px 26px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.tabs{
+    display:flex;
+    gap:10px;
+    margin-top:30px;
+    flex-wrap:wrap;
+}
+
+.tab-btn{
+    padding:12px 22px;
+    background:#1e293b;
+    border:none;
+    color:white;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+.tab-btn.active{
+    background:#22c55e;
+}
+
+.tab-content{
+    display:none;
+    margin-top:20px;
+}
+
+.tab-content.active{
+    display:block;
+}
+
+.section-box{
+    background:#111827;
+    padding:25px;
+    border-radius:20px;
+    line-height:1.8;
+}
+
+.sidebar{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.xp-card{
+    background:linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a
+    );
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+}
+
+.complete-btn{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:14px;
+    background:#22c55e;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    font-weight:600;
+    text-decoration:none;
+    text-align:center;
+    display:block;
+}
+
+.completed-box{
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    background:#16a34a;
+    text-align:center;
+    font-weight:bold;
+}
+
+.lesson-nav{
+    background:#111827;
+    padding:25px;
+    border-radius:20px;
+}
+
+.lesson-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    margin-top:10px;
+    background:#1e293b;
+    border-radius:12px;
+    text-decoration:none;
+    color:white;
+}
+
+.lesson-item.active{
+    border:2px solid #22c55e;
+}
+
+.assignment-box{
+    background:#0f172a;
+    padding:20px;
+    border-radius:16px;
+    margin-top:20px;
+}
+
+.submit-btn{
+    background:#22c55e;
+    color:white;
+    border:none;
+    padding:14px 24px;
+    border-radius:12px;
+    margin-top:20px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+}
+
+.quiz-card{
+    background:#0f172a;
+    padding:20px;
+    border-radius:16px;
+    margin-bottom:20px;
+}
+
+.score-box{
+    margin-top:20px;
+    background:#22c55e20;
+    padding:20px;
+    border-radius:16px;
+    color:#22c55e;
+    font-size:22px;
+    font-weight:bold;
+}
+
+@media(max-width:900px){
+
+    .content-grid{
+        grid-template-columns:1fr;
+    }
+
+    .lesson-title{
+        font-size:32px;
+    }
+}
+
+</style>
+
+<div class="container">
+
+    <!-- Header -->
+
+    <div class="lesson-header">
+
+        <div class="day-badge">
+            Day {{ lesson.day }}
+        </div>
+
+        <h1 class="lesson-title">
+            {{ lesson.title }}
+        </h1>
+
+        <p class="lesson-description">
+            {{ lesson.description }}
+        </p>
+
+    </div>
+
+    <!-- Progress -->
+
+    <div class="progress-section">
+
+        <h3>
+            Course Progress
+        </h3>
+
+        <div class="progress-bar">
+
+            <div
+class="progress-fill"
+
+style="
+width:
+{{ progress } } %;
+"
+
+></div>
+
+        </div>
+
+    </div>
+
+    <div class="content-grid">
+
+        <!-- Main -->
+
+        <div>
+
+            <!-- Video -->
+
+            <div class="video-section">
+
+                <img
+                src="https://img.youtube.com/vi/{{ lesson.video_url|cut:'https://www.youtube.com/watch?v=' }}/maxresdefault.jpg"
+                class="video-thumbnail"
+                >
+
+                <div class="video-info">
+
+                    <h2>
+                        🎥 Watch Tutorial
+                    </h2>
+
+                    <a
+                    href="{{ lesson.video_url }}"
+                    target="_blank"
+                    class="watch-btn"
+                    >
+                        ▶ Watch Video
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- Tabs -->
+
+            <div class="tabs">
+
+                <button
+                class="tab-btn active"
+                onclick="openTab(event,'notes')"
+                >
+                    Notes
+                </button>
+
+                <button
+                class="tab-btn"
+                onclick="openTab(event,'quiz')"
+                >
+                    Quiz
+                </button>
+
+                <button
+                class="tab-btn"
+                onclick="openTab(event,'assignment')"
+                >
+                    Assignment
+                </button>
+
+            </div>
+
+            <!-- Notes -->
+
+            <div
+            id="notes"
+            class="tab-content active"
+            >
+
+                <div class="section-box">
+
+                    <h2>
+                        📘 Notes
+                    </h2>
+
+                    <br>
+
+                    {{ lesson.notes|linebreaks }}
+
+                </div>
+
+            </div>
+
+            <!-- Quiz -->
+
+            <div
+            id="quiz"
+            class="tab-content"
+            >
+
+                <div class="section-box">
+
+                    <h2>
+                        🧠 Quiz Questions
+                    </h2>
+
+                    <br>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        {% for quiz in quiz_questions %}
+
+                        <div class="quiz-card">
+
+                            <h3>
+
+                                Q{{ forloop.counter }}.
+                                {{ quiz.question }}
+
+                            </h3>
+
+                            <br>
+
+                            <label>
+
+                                <input
+                                type="radio"
+                                name="quiz_{{ quiz.id }}"
+                                value="{{ quiz.option1 }}"
+                                >
+
+                                {{ quiz.option1 }}
+
+                            </label>
+
+                            <br><br>
+
+                            <label>
+
+                                <input
+                                type="radio"
+                                name="quiz_{{ quiz.id }}"
+                                value="{{ quiz.option2 }}"
+                                >
+
+                                {{ quiz.option2 }}
+
+                            </label>
+
+                            <br><br>
+
+                            <label>
+
+                                <input
+                                type="radio"
+                                name="quiz_{{ quiz.id }}"
+                                value="{{ quiz.option3 }}"
+                                >
+
+                                {{ quiz.option3 }}
+
+                            </label>
+
+                            <br><br>
+
+                            <label>
+
+                                <input
+                                type="radio"
+                                name="quiz_{{ quiz.id }}"
+                                value="{{ quiz.option4 }}"
+                                >
+
+                                {{ quiz.option4 }}
+
+                            </label>
+
+                        </div>
+
+                        {% endfor %}
+
+                        {% if not existing_attempt %}
+
+                        <button
+                        type="submit"
+                        class="submit-btn"
+                        >
+
+                            Submit Quiz
+
+                        </button>
+
+                        {% endif %}
+
+                    </form>
+
+                    {% if score is not None %}
+
+                    <div class="score-box">
+
+                        🎉 Your Score:
+                        {{ score }}/{{ quiz_questions|length }}
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <!-- Assignment -->
+
+            <div
+            id="assignment"
+            class="tab-content"
+            >
+
+                <div class="section-box">
+
+                    <h2>
+                        📝 Assignment
+                    </h2>
+
+                    <br>
+
+                    <div class="assignment-box">
+
+                        <h3>
+                            {{ lesson.assignment_title }}
+                        </h3>
+
+                        <br>
+
+                        {{ lesson.assignment_description|linebreaks }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Sidebar -->
+
+        <div class="sidebar">
+
+            <!-- XP -->
+
+            <div class="xp-card">
+
+                <h1>
+                    +150 XP
+                </h1>
+
+                <p>
+                    Complete to Earn
+                </p>
+
+            </div>
+
+            <!-- Complete -->
+
+            {% if completed %}
+
+                <div class="completed-box">
+
+                    ✅ Lesson Completed
+
+                </div>
+
+            {% else %}
+
+                <a
+                href="/complete-lesson/{{ lesson.id }}/"
+                class="complete-btn"
+                >
+
+                    Mark as Complete
+
+                </a>
+
+            {% endif %}
+
+            <!-- Navigation -->
+
+            <div class="lesson-nav">
+
+                <h2>
+                    Course Lessons
+                </h2>
+
+                {% for item in lessons %}
+
+                <a
+                href="/lesson/{{ item.id }}/"
+
+                class="lesson-item
+                {% if item.id == lesson.id %}
+                active
+                {% endif %}
+                "
+
+                >
+
+                    <span>
+
+                        Day {{ item.day }}
+                        -
+                        {{ item.title }}
+
+                    </span>
+
+                </a>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function openTab(event, tabId){
+
+    document.querySelectorAll(
+        '.tab-content'
+    ).forEach(tab => {
+
+        tab.classList.remove('active')
+
+    })
+
+    document.querySelectorAll(
+        '.tab-btn'
+    ).forEach(btn => {
+
+        btn.classList.remove('active')
+
+    })
+
+    document.getElementById(
+        tabId
+    ).classList.add('active')
+
+    event.currentTarget.classList.add('active')
+}
+
+</script>
+
+{% endblock %}

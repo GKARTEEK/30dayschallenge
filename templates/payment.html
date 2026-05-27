@@ -152,13 +152,9 @@ var options = {
 
     "order_id": "{{ payment.id }}",
 
-    "handler": function(response){
-    window.location.href =
-        "/payment-success/{{ course.id }}/"
-        + "?payment_id=" + response.razorpay_payment_id
-        + "&order_id=" + response.razorpay_order_id
-        + "&signature=" + response.razorpay_signature;
-},
+    "callback_url": "https://30dayschallenge-production.up.railway.app/payment-success/{{ course.id }}/",
+
+    "redirect": true,
 
     "prefill": {
         "name": "{{ request.user.username }}",

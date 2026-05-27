@@ -4,40 +4,28 @@ from django.shortcuts import (
     get_object_or_404
 )
 
-
-from django.shortcuts import render
-
-from .models import Course
-
-
 from django.contrib.auth.decorators import login_required
-from .models import (
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
-    Course,
-
-    Enrollment,
-
-    Lesson,
-
-    QuizQuestion,
-
-    QuizAttempt,
-
-    UserProfile,
-
-    CompletedLesson,
-
-    CommunityPost,
-
-    Badge,
-
-    PostComment,
-
-    PostLike
-
-)
-
+import razorpay
+import hmac
+import hashlib
 from datetime import date
+
+from .models import (
+    Course,
+    Enrollment,
+    Lesson,
+    QuizQuestion,
+    QuizAttempt,
+    UserProfile,
+    CompletedLesson,
+    CommunityPost,
+    Badge,
+    PostComment,
+    PostLike
+)
 
 
 # =========================
@@ -64,51 +52,36 @@ def course_list(request):
 # =========================
 
 @login_required(login_url='login')
-
-# =========================
-# ENROLL COURSE
-# =========================
-
-@login_required(login_url='login')
-@login_required
 def enroll_course(request, course_id):
 
-    course = Course.objects.get(
+    course = get_object_or_404(
+        Course,
         id=course_id
     )
 
-    enrolled = Enrollment.objects.filter(
-
+    already_enrolled = Enrollment.objects.filter(
         user=request.user,
-
         course=course
     ).exists()
 
-    if not enrolled:
+    if not already_enrolled:
 
         Enrollment.objects.create(
-
             user=request.user,
-
             course=course
         )
 
     return redirect(
-
         'course_lessons',
-
         course_id=course.id
     )
-# =========================
-# COURSE LESSONS
-# =========================
+
 
 # =========================
 # COURSE LESSONS
 # =========================
 
 @login_required(login_url='login')
-
 def course_lessons(request, course_id):
 
     course = get_object_or_404(
@@ -117,13 +90,21 @@ def course_lessons(request, course_id):
     )
 
     enrollment = get_object_or_404(
-
         Enrollment,
-
         user=request.user,
-
         course=course
     )
+
+    # =========================
+    # PAYMENT CHECK
+    # =========================
+
+    if not enrollment.is_paid and not enrollment.is_free_access:
+
+        return redirect(
+            'payment_page',
+            course_id=course.id
+        )
 
     # =========================
     # UNLOCK SYSTEM
@@ -147,19 +128,13 @@ def course_lessons(request, course_id):
     )
 
     if progress > 100:
-
         progress = 100
 
     context = {
-
         'course': course,
-
         'lessons': lessons,
-
         'days_passed': days_passed,
-
         'progress': progress
-
     }
 
     return render(
@@ -174,7 +149,6 @@ def course_lessons(request, course_id):
 # =========================
 
 @login_required(login_url='login')
-
 def lesson_detail(request, lesson_id):
 
     lesson = get_object_or_404(
@@ -183,15 +157,21 @@ def lesson_detail(request, lesson_id):
     )
 
     enrollment = get_object_or_404(
-
         Enrollment,
-
         user=request.user,
-
         course=lesson.course
     )
 
-   
+    # =========================
+    # PAYMENT CHECK
+    # =========================
+
+    if not enrollment.is_paid and not enrollment.is_free_access:
+
+        return redirect(
+            'payment_page',
+            course_id=lesson.course.id
+        )
 
     # =========================
     # DAILY UNLOCK
@@ -238,11 +218,8 @@ def lesson_detail(request, lesson_id):
     # =========================
 
     completed = CompletedLesson.objects.filter(
-
         user=request.user,
-
         lesson=lesson
-
     ).exists()
 
     # =========================
@@ -250,11 +227,8 @@ def lesson_detail(request, lesson_id):
     # =========================
 
     existing_attempt = QuizAttempt.objects.filter(
-
         user=request.user,
-
         lesson=lesson
-
     ).first()
 
     score = None
@@ -264,8 +238,6 @@ def lesson_detail(request, lesson_id):
     # =========================
 
     if request.method == "POST":
-
-        # Prevent multiple attempts
 
         if existing_attempt:
 
@@ -289,158 +261,31 @@ def lesson_detail(request, lesson_id):
 
             score = correct_answers
 
-            # SAVE QUIZ ATTEMPT
-
             QuizAttempt.objects.create(
-
                 user=request.user,
-
                 lesson=lesson,
-
                 score=score,
-
                 total_questions=total_questions
-
             )
-
-            # =========================
-            # XP REWARD
-            # =========================
 
             profile = UserProfile.objects.get(
                 user=request.user
             )
 
-            earned_xp = score * 10
-
-            profile.xp += earned_xp
-
+            profile.xp += score * 10
             profile.coins += score * 2
-
-            profile.level = (
-                profile.xp // 500
-            ) + 1
-
+            profile.level = (profile.xp // 500) + 1
             profile.save()
 
     context = {
-
         'lesson': lesson,
-
         'lessons': lessons,
-
         'quiz_questions': quiz_questions,
-
         'progress': progress,
-
         'days_passed': days_passed,
-
         'score': score,
-
         'existing_attempt': existing_attempt,
-
         'completed': completed
-
-    }
-
-    return render(
-        request,
-        'lesson_detail.html',
-        context
-    )
-    
-    
-    # =========================
-    # QUIZ SUBMISSION
-    # =========================
-
-    if request.method == "POST":
-
-        if not existing_attempt:
-
-            correct_answers = 0
-
-            total_questions = quiz_questions.count()
-
-            for quiz in quiz_questions:
-
-                selected_answer = request.POST.get(
-                    f"quiz_{quiz.id}"
-                )
-
-                if selected_answer == quiz.correct_answer:
-
-                    correct_answers += 1
-
-            score = correct_answers
-
-            QuizAttempt.objects.create(
-
-                user=request.user,
-
-                lesson=lesson,
-
-                score=score,
-
-                total_questions=total_questions
-
-            )
-
-            earned_xp = score * 50
-
-            earned_coins = score * 10
-
-            profile = UserProfile.objects.get(
-                user=request.user
-            )
-
-            profile.xp += earned_xp
-
-            profile.coins += earned_coins
-
-            profile.level = (
-                profile.xp // 500
-            ) + 1
-
-            profile.save()
-
-        else:
-
-            score = existing_attempt.score
-
-    elif existing_attempt:
-
-        score = existing_attempt.score
-
-    profile = UserProfile.objects.get(
-        user=request.user
-    )
-
-    completed = CompletedLesson.objects.filter(
-        user=request.user,
-        lesson=lesson
-    ).exists()
-
-    context = {
-
-        'lesson': lesson,
-
-        'lessons': lessons,
-
-        'quiz_questions': quiz_questions,
-
-        'progress': progress,
-
-        'days_passed': days_passed,
-
-        'score': score,
-
-        'profile': profile,
-
-        'existing_attempt': existing_attempt,
-
-        'completed': completed
-
     }
 
     return render(
@@ -455,7 +300,6 @@ def lesson_detail(request, lesson_id):
 # =========================
 
 @login_required(login_url='login')
-
 def complete_lesson(request, lesson_id):
 
     lesson = get_object_or_404(
@@ -471,9 +315,7 @@ def complete_lesson(request, lesson_id):
     if not already_completed:
 
         CompletedLesson.objects.create(
-
             user=request.user,
-
             lesson=lesson
         )
 
@@ -482,16 +324,58 @@ def complete_lesson(request, lesson_id):
         )
 
         profile.xp += 100
-
         profile.coins += 25
-
         profile.completed_lessons += 1
-
-        profile.level = (
-            profile.xp // 500
-        ) + 1
-
+        profile.level = (profile.xp // 500) + 1
         profile.save()
+
+        # =========================
+        # BADGES SYSTEM
+        # =========================
+
+        if profile.completed_lessons == 1:
+
+            Badge.objects.get_or_create(
+                user=request.user,
+                title='First Step',
+                defaults={
+                    'icon': '🚀',
+                    'description': 'Completed first lesson'
+                }
+            )
+
+        if profile.completed_lessons == 5:
+
+            Badge.objects.get_or_create(
+                user=request.user,
+                title='Fast Learner',
+                defaults={
+                    'icon': '⚡',
+                    'description': 'Completed 5 lessons'
+                }
+            )
+
+        if profile.completed_lessons == 10:
+
+            Badge.objects.get_or_create(
+                user=request.user,
+                title='Consistency King',
+                defaults={
+                    'icon': '🔥',
+                    'description': 'Completed 10 lessons'
+                }
+            )
+
+        if profile.xp >= 1000:
+
+            Badge.objects.get_or_create(
+                user=request.user,
+                title='1000 XP Club',
+                defaults={
+                    'icon': '💎',
+                    'description': 'Reached 1000 XP'
+                }
+            )
 
     return redirect(
         'lesson_detail',
@@ -504,7 +388,6 @@ def complete_lesson(request, lesson_id):
 # =========================
 
 @login_required(login_url='login')
-
 def leaderboard(request):
 
     profiles = UserProfile.objects.all().order_by(
@@ -523,41 +406,31 @@ def leaderboard(request):
     )
 
 
+# =========================
+# COMMUNITY
+# =========================
+
 @login_required(login_url='login')
-
 def community(request):
-
-    # CREATE POST
 
     if request.method == "POST":
 
-        content = request.POST.get(
-            'content'
-        )
+        content = request.POST.get('content')
 
         if content:
 
             CommunityPost.objects.create(
-
                 user=request.user,
-
                 content=content
-
             )
-
-    # FETCH POSTS
 
     posts = CommunityPost.objects.all().order_by(
         '-created_at'
     )
 
-    # TOP USERS
-
     top_users = UserProfile.objects.all().order_by(
         '-xp'
     )[:5]
-
-    # LIKED POSTS
 
     liked_posts = PostLike.objects.filter(
         user=request.user
@@ -567,13 +440,9 @@ def community(request):
     )
 
     context = {
-
         'posts': posts,
-
         'top_users': top_users,
-
         'liked_posts': liked_posts
-
     }
 
     return render(
@@ -581,12 +450,80 @@ def community(request):
         'community.html',
         context
     )
-    # =========================
+
+
+# =========================
+# LIKE / UNLIKE POST
+# =========================
+
+@login_required(login_url='login')
+def like_post(request, post_id):
+
+    post = get_object_or_404(
+        CommunityPost,
+        id=post_id
+    )
+
+    already_liked = PostLike.objects.filter(
+        post=post,
+        user=request.user
+    ).first()
+
+    if already_liked:
+
+        already_liked.delete()
+        post.likes -= 1
+
+        if post.likes < 0:
+            post.likes = 0
+
+        post.save()
+
+    else:
+
+        PostLike.objects.create(
+            post=post,
+            user=request.user
+        )
+
+        post.likes += 1
+        post.save()
+
+    return redirect('community')
+
+
+# =========================
+# COMMENT SYSTEM
+# =========================
+
+@login_required(login_url='login')
+def add_comment(request, post_id):
+
+    post = get_object_or_404(
+        CommunityPost,
+        id=post_id
+    )
+
+    if request.method == "POST":
+
+        content = request.POST.get('content')
+
+        if content:
+
+            PostComment.objects.create(
+                post=post,
+                user=request.user,
+                content=content
+            )
+
+    return redirect('community')
+
+
+# =========================
 # CERTIFICATE
 # =========================
 
 @login_required(login_url='login')
-
 def generate_certificate(request, course_id):
 
     course = get_object_or_404(
@@ -603,8 +540,6 @@ def generate_certificate(request, course_id):
         lesson__course=course
     ).count()
 
-    # Prevent incomplete users
-
     if completed_lessons < total_lessons:
 
         return redirect(
@@ -613,11 +548,8 @@ def generate_certificate(request, course_id):
         )
 
     context = {
-
         'course': course,
-
         'user': request.user
-
     }
 
     return render(
@@ -625,245 +557,13 @@ def generate_certificate(request, course_id):
         'certificate.html',
         context
     )
+
+
 # =========================
-# COMPLETE LESSON
-# =========================
-
-@login_required(login_url='login')
-
-def complete_lesson(request, lesson_id):
-
-    lesson = get_object_or_404(
-        Lesson,
-        id=lesson_id
-    )
-
-    already_completed = CompletedLesson.objects.filter(
-        user=request.user,
-        lesson=lesson
-    ).exists()
-
-    if not already_completed:
-
-        # SAVE COMPLETED LESSON
-
-        CompletedLesson.objects.create(
-
-            user=request.user,
-
-            lesson=lesson
-        )
-
-        # GET USER PROFILE
-
-        profile = UserProfile.objects.get(
-            user=request.user
-        )
-
-        # XP + COINS
-
-        profile.xp += 100
-
-        profile.coins += 25
-
-        profile.completed_lessons += 1
-
-        profile.level = (
-            profile.xp // 500
-        ) + 1
-
-        profile.save()
-
-        # =========================
-        # BADGES SYSTEM
-        # =========================
-
-        # FIRST LESSON
-
-        if profile.completed_lessons == 1:
-
-            Badge.objects.get_or_create(
-
-                user=request.user,
-
-                title='First Step',
-
-                defaults={
-
-                    'icon': '🚀',
-
-                    'description':
-                    'Completed first lesson'
-
-                }
-
-            )
-
-        # 5 LESSONS
-
-        if profile.completed_lessons == 5:
-
-            Badge.objects.get_or_create(
-
-                user=request.user,
-
-                title='Fast Learner',
-
-                defaults={
-
-                    'icon': '⚡',
-
-                    'description':
-                    'Completed 5 lessons'
-
-                }
-
-            )
-
-        # 10 LESSONS
-
-        if profile.completed_lessons == 10:
-
-            Badge.objects.get_or_create(
-
-                user=request.user,
-
-                title='Consistency King',
-
-                defaults={
-
-                    'icon': '🔥',
-
-                    'description':
-                    'Completed 10 lessons'
-
-                }
-
-            )
-
-        # 1000 XP
-
-        if profile.xp >= 1000:
-
-            Badge.objects.get_or_create(
-
-                user=request.user,
-
-                title='1000 XP Club',
-
-                defaults={
-
-                    'icon': '💎',
-
-                    'description':
-                    'Reached 1000 XP'
-
-                }
-
-            )
-
-    return redirect(
-        'lesson_detail',
-        lesson_id=lesson.id
-    )
-        
-    # =========================
-# LIKE POST
-# =========================
-# =========================
-# LIKE / UNLIKE POST
-# =========================
-
-@login_required(login_url='login')
-
-def like_post(request, post_id):
-
-    post = get_object_or_404(
-        CommunityPost,
-        id=post_id
-    )
-
-    already_liked = PostLike.objects.filter(
-
-        post=post,
-
-        user=request.user
-
-    ).first()
-
-    # UNLIKE
-
-    if already_liked:
-
-        already_liked.delete()
-
-        post.likes -= 1
-
-        if post.likes < 0:
-
-            post.likes = 0
-
-        post.save()
-
-    # LIKE
-
-    else:
-
-        PostLike.objects.create(
-
-            post=post,
-
-            user=request.user
-        )
-
-        post.likes += 1
-
-        post.save()
-
-    return redirect(
-        'community'
-    )
-# =========================
-# COMMENT SYSTEM
-# =========================
-
-@login_required(login_url='login')
-
-def add_comment(request, post_id):
-
-    post = get_object_or_404(
-        CommunityPost,
-        id=post_id
-    )
-
-    if request.method == "POST":
-
-        content = request.POST.get(
-            'content'
-        )
-
-        if content:
-
-            PostComment.objects.create(
-
-                post=post,
-
-                user=request.user,
-
-                content=content
-
-            )
-
-    return redirect(
-        'community'
-    )
-
-    # =========================
 # PROFILE PAGE
 # =========================
 
 @login_required(login_url='login')
-
 def profile_page(request):
 
     profile = UserProfile.objects.get(
@@ -889,19 +589,12 @@ def profile_page(request):
     ).count() + 1
 
     context = {
-
         'profile': profile,
-
         'badges': badges,
-
         'posts': posts,
-
         'certificates': certificates,
-
         'rank': rank,
-
         'total_users': total_users
-
     }
 
     return render(
@@ -910,10 +603,6 @@ def profile_page(request):
         context
     )
 
-
-import razorpay
-from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
 
 # =========================
 # PAYMENT PAGE
@@ -924,7 +613,6 @@ def payment_page(request, course_id):
 
     course = get_object_or_404(Course, id=course_id)
 
-    # Check if already enrolled
     already_enrolled = Enrollment.objects.filter(
         user=request.user,
         course=course,
@@ -942,7 +630,7 @@ def payment_page(request, course_id):
     )
 
     payment = client.order.create({
-        "amount": 100,        # ₹1 in paise
+        "amount": 100,
         "currency": "INR",
         "payment_capture": "1"
     })
@@ -959,8 +647,6 @@ def payment_page(request, course_id):
 # =========================
 # PAYMENT SUCCESS
 # =========================
-import hmac
-import hashlib
 
 @csrf_exempt
 @login_required(login_url='login')
@@ -968,9 +654,9 @@ def payment_success(request, course_id):
 
     course = get_object_or_404(Course, id=course_id)
 
-    payment_id = request.GET.get('payment_id')
-    order_id = request.GET.get('order_id')
-    signature = request.GET.get('signature')
+    payment_id = request.POST.get('razorpay_payment_id') or request.GET.get('payment_id')
+    order_id = request.POST.get('razorpay_order_id') or request.GET.get('order_id')
+    signature = request.POST.get('razorpay_signature') or request.GET.get('signature')
 
     # =========================
     # VERIFY SIGNATURE
@@ -979,7 +665,6 @@ def payment_success(request, course_id):
     try:
 
         key_secret = settings.RAZORPAY_KEY_SECRET
-
         msg = f"{order_id}|{payment_id}"
 
         generated_signature = hmac.new(

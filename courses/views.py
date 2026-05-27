@@ -666,8 +666,8 @@ def payment_page(request, course_id):
     # CREATE ORDER
     # =========================
 
-    amount = int(course.price * 100)
-
+    #amount = int(course.price * 100)
+    amount = 100
     payment = client.order.create({
         "amount": amount,
         "currency": "INR",

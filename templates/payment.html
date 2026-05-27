@@ -153,10 +153,12 @@ var options = {
     "order_id": "{{ payment.id }}",
 
     "handler": function(response){
-        window.location.href =
-            "/payment-success/{{ course.id }}/?payment_id="
-            + response.razorpay_payment_id;
-    },
+    window.location.href =
+        "/payment-success/{{ course.id }}/"
+        + "?payment_id=" + response.razorpay_payment_id
+        + "&order_id=" + response.razorpay_order_id
+        + "&signature=" + response.razorpay_signature;
+},
 
     "prefill": {
         "name": "{{ request.user.username }}",

@@ -959,14 +959,45 @@ def payment_page(request, course_id):
 # =========================
 # PAYMENT SUCCESS
 # =========================
+import hmac
+import hashlib
 
 @csrf_exempt
 @login_required(login_url='login')
 def payment_success(request, course_id):
 
-    payment_id = request.GET.get('payment_id')
-
     course = get_object_or_404(Course, id=course_id)
+
+    payment_id = request.GET.get('payment_id')
+    order_id = request.GET.get('order_id')
+    signature = request.GET.get('signature')
+
+    # =========================
+    # VERIFY SIGNATURE
+    # =========================
+
+    try:
+
+        key_secret = settings.RAZORPAY_KEY_SECRET
+
+        msg = f"{order_id}|{payment_id}"
+
+        generated_signature = hmac.new(
+            key_secret.encode(),
+            msg.encode(),
+            hashlib.sha256
+        ).hexdigest()
+
+        if generated_signature != signature:
+            return render(request, 'payment_failed.html')
+
+    except Exception as e:
+
+        print(e)
+
+    # =========================
+    # SAVE ENROLLMENT
+    # =========================
 
     enrollment, created = Enrollment.objects.get_or_create(
         user=request.user,

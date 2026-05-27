@@ -622,6 +622,20 @@ def payment_page(request, course_id):
     if already_enrolled:
         return redirect('course_lessons', course_id=course.id)
 
+    # =========================
+    # CREATE PENDING ENROLLMENT
+    # =========================
+
+    enrollment, created = Enrollment.objects.get_or_create(
+        user=request.user,
+        course=course
+    )
+
+    # Store user id in session
+    request.session['payment_user_id'] = request.user.id
+    request.session['payment_course_id'] = course_id
+    request.session.save()
+
     client = razorpay.Client(
         auth=(
             settings.RAZORPAY_KEY_ID,
@@ -643,20 +657,34 @@ def payment_page(request, course_id):
 
     return render(request, 'payment.html', context)
 
-
-# =========================
-# PAYMENT SUCCESS
-# =========================
-
-@csrf_exempt
-@login_required(login_url='login')
+    @csrf_exempt
 def payment_success(request, course_id):
+
+    from django.contrib.auth.models import User
 
     course = get_object_or_404(Course, id=course_id)
 
     payment_id = request.POST.get('razorpay_payment_id') or request.GET.get('payment_id')
     order_id = request.POST.get('razorpay_order_id') or request.GET.get('order_id')
     signature = request.POST.get('razorpay_signature') or request.GET.get('signature')
+
+    # =========================
+    # GET USER FROM SESSION
+    # =========================
+
+    user = request.user
+
+    if not user.is_authenticated:
+
+        user_id = request.session.get('payment_user_id')
+
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return redirect('login')
+        else:
+            return redirect('login')
 
     # =========================
     # VERIFY SIGNATURE
@@ -685,12 +713,22 @@ def payment_success(request, course_id):
     # =========================
 
     enrollment, created = Enrollment.objects.get_or_create(
-        user=request.user,
+        user=user,
         course=course
     )
 
     enrollment.is_paid = True
     enrollment.payment_id = payment_id
     enrollment.save()
+
+    # =========================
+    # LOGIN USER IF NEEDED
+    # =========================
+
+    if not request.user.is_authenticated:
+
+        from django.contrib.auth import login
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
 
     return redirect('course_lessons', course_id=course.id)

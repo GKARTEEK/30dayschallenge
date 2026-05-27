@@ -657,7 +657,7 @@ def payment_page(request, course_id):
 
     return render(request, 'payment.html', context)
 
-    @csrf_exempt
+@csrf_exempt
 def payment_success(request, course_id):
 
     from django.contrib.auth.models import User

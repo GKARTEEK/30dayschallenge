@@ -13,13 +13,18 @@ class Course(models.Model):
     description = models.TextField()
 
     thumbnail = models.ImageField(
-    upload_to='courses/',
-    blank=True,
-    null=True
+        upload_to='courses/',
+        blank=True,
+        null=True
     )
 
     total_days = models.IntegerField(
         default=30
+    )
+
+    # COURSE PRICE
+    price = models.IntegerField(
+        default=149
     )
 
     created_at = models.DateTimeField(
@@ -30,9 +35,6 @@ class Course(models.Model):
 
         return self.title
 
-# =========================
-# Enrollment Model
-# =========================
 
 # =========================
 # Enrollment Model
@@ -55,21 +57,25 @@ class Enrollment(models.Model):
     )
 
     # PAYMENT STATUS
-
     is_paid = models.BooleanField(
         default=False
     )
 
     # RAZORPAY PAYMENT ID
-
     payment_id = models.CharField(
-        max_length=200,
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    # RAZORPAY ORDER ID
+    order_id = models.CharField(
+        max_length=255,
         blank=True,
         null=True
     )
 
     # ADMIN FREE ACCESS
-
     is_free_access = models.BooleanField(
         default=False
     )
@@ -77,7 +83,7 @@ class Enrollment(models.Model):
     def __str__(self):
 
         return f"{self.user.username} - {self.course.title}"
-# =========================
+        # =========================
 # Lesson Model
 # =========================
 

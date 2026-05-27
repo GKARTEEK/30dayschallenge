@@ -228,3 +228,11 @@ LOGIN_URL = '/login/'
 
 RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
 RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://30dayschallenge-production.up.railway.app",
+]
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_SAVE_EVERY_REQUEST = True

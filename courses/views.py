@@ -605,7 +605,6 @@ def profile_page(request):
         context
     )
 
-
 # =========================
 # PAYMENT PAGE
 # =========================
@@ -613,7 +612,14 @@ def profile_page(request):
 @login_required(login_url='login')
 def payment_page(request, course_id):
 
-    course = get_object_or_404(Course, id=course_id)
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
+
+    # =========================
+    # CHECK ALREADY PAID
+    # =========================
 
     already_enrolled = Enrollment.objects.filter(
         user=request.user,
@@ -622,10 +628,14 @@ def payment_page(request, course_id):
     ).exists()
 
     if already_enrolled:
-        return redirect('course_lessons', course_id=course.id)
+
+        return redirect(
+            'course_lessons',
+            course_id=course.id
+        )
 
     # =========================
-    # CREATE PENDING ENROLLMENT
+    # CREATE ENROLLMENT
     # =========================
 
     enrollment, created = Enrollment.objects.get_or_create(
@@ -634,12 +644,16 @@ def payment_page(request, course_id):
     )
 
     # =========================
-    # SAVE USER IN SESSION
+    # SAVE USER SESSION
     # =========================
 
     request.session['payment_user_id'] = request.user.id
-    request.session['payment_course_id'] = course_id
+    request.session['payment_course_id'] = course.id
     request.session.modified = True
+
+    # =========================
+    # RAZORPAY CLIENT
+    # =========================
 
     client = razorpay.Client(
         auth=(
@@ -648,11 +662,24 @@ def payment_page(request, course_id):
         )
     )
 
+    # =========================
+    # CREATE ORDER
+    # =========================
+
+    amount = int(course.price * 100)
+
     payment = client.order.create({
-        "amount": 100,
+        "amount": amount,
         "currency": "INR",
         "payment_capture": "1"
     })
+
+    # =========================
+    # SAVE ORDER ID
+    # =========================
+
+    enrollment.order_id = payment['id']
+    enrollment.save()
 
     context = {
         "course": course,
@@ -660,7 +687,11 @@ def payment_page(request, course_id):
         "razorpay_key": settings.RAZORPAY_KEY_ID
     }
 
-    return render(request, 'payment.html', context)
+    return render(
+        request,
+        'payment.html',
+        context
+    )
 
 
 # =========================
@@ -670,11 +701,29 @@ def payment_page(request, course_id):
 @csrf_exempt
 def payment_success(request, course_id):
 
-    course = get_object_or_404(Course, id=course_id)
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
 
-    payment_id = request.POST.get('razorpay_payment_id') or request.GET.get('payment_id')
-    order_id = request.POST.get('razorpay_order_id') or request.GET.get('order_id')
-    signature = request.POST.get('razorpay_signature') or request.GET.get('signature')
+    # =========================
+    # GET PAYMENT DETAILS
+    # =========================
+
+    payment_id = (
+        request.POST.get('razorpay_payment_id')
+        or request.GET.get('razorpay_payment_id')
+    )
+
+    order_id = (
+        request.POST.get('razorpay_order_id')
+        or request.GET.get('razorpay_order_id')
+    )
+
+    signature = (
+        request.POST.get('razorpay_signature')
+        or request.GET.get('razorpay_signature')
+    )
 
     # =========================
     # GET USER
@@ -682,20 +731,62 @@ def payment_success(request, course_id):
 
     user = request.user
 
+    # SESSION LOST AFTER PAYMENT
     if not user.is_authenticated:
 
-        user_id = request.session.get('payment_user_id')
+        user_id = request.session.get(
+            'payment_user_id'
+        )
 
         if user_id:
 
             try:
-                user = User.objects.get(id=user_id)
+
+                user = User.objects.get(
+                    id=user_id
+                )
+
+                # LOGIN USER AGAIN
+
+                user.backend = (
+                    'django.contrib.auth.backends.ModelBackend'
+                )
+
+                login(request, user)
+
             except User.DoesNotExist:
+
                 return redirect('login')
 
         else:
 
             return redirect('login')
+
+    # =========================
+    # VERIFY PAYMENT SIGNATURE
+    # =========================
+
+    client = razorpay.Client(
+        auth=(
+            settings.RAZORPAY_KEY_ID,
+            settings.RAZORPAY_KEY_SECRET
+        )
+    )
+
+    try:
+
+        client.utility.verify_payment_signature({
+            'razorpay_order_id': order_id,
+            'razorpay_payment_id': payment_id,
+            'razorpay_signature': signature
+        })
+
+    except:
+
+        return redirect(
+            'payment_page',
+            course_id=course.id
+        )
 
     # =========================
     # SAVE ENROLLMENT
@@ -708,15 +799,26 @@ def payment_success(request, course_id):
 
     enrollment.is_paid = True
     enrollment.payment_id = payment_id
+    enrollment.order_id = order_id
     enrollment.save()
 
     # =========================
-    # LOGIN USER IF NEEDED
+    # CLEAR SESSION
     # =========================
 
-    if not request.user.is_authenticated:
+    if 'payment_user_id' in request.session:
 
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(request, user)
+        del request.session['payment_user_id']
 
-    return redirect('course_lessons', course_id=course.id)
+    if 'payment_course_id' in request.session:
+
+        del request.session['payment_course_id']
+
+    # =========================
+    # REDIRECT TO COURSE
+    # =========================
+
+    return redirect(
+        'course_lessons',
+        course_id=course.id
+    )

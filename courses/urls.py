@@ -138,7 +138,7 @@ path(
 
 path(
     'checkout/',
-    views.payment_page,
+    payment_page,
     name='payment_page'
 ),
 

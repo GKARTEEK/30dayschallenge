@@ -7,10 +7,6 @@ import os
 import dj_database_url
 from dotenv import load_dotenv
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
 # =========================
 # LOAD ENV
 # =========================
@@ -51,11 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # CLOUDINARY
-
-    'cloudinary_storage',
-    'cloudinary',
 
     # CUSTOM APPS
 
@@ -205,20 +196,12 @@ STATICFILES_STORAGE = (
 
 
 # =========================
-# MEDIA FILES (CLOUDINARY)
+# MEDIA FILES
 # =========================
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-}
-
-DEFAULT_FILE_STORAGE = (
-    'cloudinary_storage.storage.MediaCloudinaryStorage'
-)
-
 MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # =========================

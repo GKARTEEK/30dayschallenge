@@ -811,3 +811,33 @@ def payment_success(request):
         'course_lessons',
         course_id=course.id
     )
+def about_page(request):
+
+    return render(
+        request,
+        'about.html'
+    )
+
+
+def contact_page(request):
+
+    return render(
+        request,
+        'contact.html'
+    )
+
+
+def privacy_page(request):
+
+    return render(
+        request,
+        'privacy.html'
+    )
+
+
+def terms_page(request):
+
+    return render(
+        request,
+        'terms.html'
+    )

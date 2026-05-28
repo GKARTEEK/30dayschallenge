@@ -261,6 +261,70 @@
         text-align: center;
         box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
     }
+    .video-section{
+    background:#0f172a;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 0 25px rgba(34,197,94,0.15);
+    margin-bottom:30px;
+}
+
+.video-thumbnail{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+    display:block;
+}
+
+.video-info{
+    padding:25px;
+}
+
+.video-info h2{
+    color:white;
+    font-size:32px;
+    margin-bottom:12px;
+}
+
+.video-desc{
+    color:#cbd5e1;
+    font-size:16px;
+    margin-bottom:20px;
+    line-height:1.6;
+}
+
+.watch-btn{
+    display:inline-block;
+    background:#22c55e;
+    color:white;
+    text-decoration:none;
+    padding:14px 28px;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.watch-btn:hover{
+    transform:translateY(-2px);
+    background:#16a34a;
+}
+
+@media(max-width:768px){
+
+    .video-thumbnail{
+        height:200px;
+    }
+
+    .video-info h2{
+        font-size:24px;
+    }
+
+    .watch-btn{
+        width:100%;
+        text-align:center;
+    }
+}
 
     .xp-card h1 {
         font-size: 48px;
@@ -507,12 +571,44 @@
         <div>
             <!-- Video -->
             <div class="video-section">
-                <img src="https://img.youtube.com/vi/{{ lesson.video_url|cut:'https://www.youtube.com/watch?v=' }}/maxresdefault.jpg" class="video-thumbnail" alt="Video thumbnail">
-                <div class="video-info">
-                    <h2>🎥 Watch Tutorial</h2>
-                    <a href="{{ lesson.video_url }}" target="_blank" class="watch-btn">▶ Watch Video</a>
-                </div>
-            </div>
+
+    {% if lesson.video_url %}
+
+        <img
+            src="https://img.youtube.com/vi/{{ lesson.video_url|cut:'https://www.youtube.com/watch?v=' }}/hqdefault.jpg"
+            class="video-thumbnail"
+            alt="{{ lesson.title }}"
+        >
+
+    {% else %}
+
+        <img
+            src="https://via.placeholder.com/800x450?text=No+Video+Available"
+            class="video-thumbnail"
+            alt="No Video"
+        >
+
+    {% endif %}
+
+    <div class="video-info">
+
+        <h2>🎥 Watch Tutorial</h2>
+
+        <p class="video-desc">
+            Learn {{ lesson.title }} step-by-step with practical explanation.
+        </p>
+
+        <a
+            href="{{ lesson.video_url }}"
+            target="_blank"
+            class="watch-btn"
+        >
+            ▶ Watch Video
+        </a>
+
+    </div>
+
+</div>
 
             <!-- Tabs -->
             <div class="tabs">

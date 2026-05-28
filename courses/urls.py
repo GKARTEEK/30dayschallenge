@@ -28,6 +28,11 @@ from .views import (
 
     payment_success,
     payment_page,
+
+    about_page,
+    contact_page,
+    privacy_page,
+    terms_page,
 )
 
 
@@ -146,6 +151,31 @@ path(
     'payment-success/',
     payment_success,
     name='payment_success'
+),
+
+
+path(
+    'about/',
+    about_page,
+    name='about'
+),
+
+path(
+    'contact/',
+    contact_page,
+    name='contact'
+),
+
+path(
+    'privacy-policy/',
+    privacy_page,
+    name='privacy'
+),
+
+path(
+    'terms-and-conditions/',
+    terms_page,
+    name='terms'
 ),
 
 ]

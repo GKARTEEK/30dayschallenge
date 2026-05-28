@@ -82,6 +82,9 @@ def enroll_course(request, course_id):
 # =========================
 # COURSE LESSONS
 # =========================
+# =========================
+# COURSE LESSONS
+# =========================
 
 @login_required(login_url='login')
 def course_lessons(request, course_id):
@@ -91,21 +94,51 @@ def course_lessons(request, course_id):
         id=course_id
     )
 
-    enrollment = get_object_or_404(
-        Enrollment,
+    # =========================
+    # HANDLE DUPLICATE ENROLLMENTS
+    # =========================
+
+    enrollments = Enrollment.objects.filter(
         user=request.user,
         course=course
+    ).order_by('-is_paid', '-is_free_access')
+
+    enrollment = enrollments.first()
+
+    # =========================
+    # NO ENROLLMENT
+    # =========================
+
+    if not enrollment:
+
+        return redirect(
+            'courses'
+        )
+
+    # =========================
+    # DELETE DUPLICATES
+    # =========================
+
+    duplicate_enrollments = enrollments.exclude(
+        id=enrollment.id
     )
+
+    if duplicate_enrollments.exists():
+
+        duplicate_enrollments.delete()
 
     # =========================
     # PAYMENT CHECK
     # =========================
 
-    if not enrollment.is_paid and not enrollment.is_free_access:
+    if (
+        not enrollment.is_paid
+        and
+        not enrollment.is_free_access
+    ):
 
         return redirect(
-            'payment_page',
-            course_id=course.id
+            'payment_page'
         )
 
     # =========================
@@ -130,6 +163,7 @@ def course_lessons(request, course_id):
     )
 
     if progress > 100:
+
         progress = 100
 
     context = {
@@ -144,7 +178,6 @@ def course_lessons(request, course_id):
         'course_lessons.html',
         context
     )
-
 
 # =========================
 # LESSON DETAIL

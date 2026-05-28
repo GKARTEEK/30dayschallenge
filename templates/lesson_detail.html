@@ -3,631 +3,609 @@
 {% block content %}
 
 <style>
-
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:40px 20px;
-}
-
-.lesson-header{
-    background:linear-gradient(135deg,#111827,#1e293b);
-    padding:40px;
-    border-radius:25px;
-    margin-bottom:30px;
-}
-
-.day-badge{
-    background:#22c55e;
-    color:white;
-    display:inline-block;
-    padding:8px 18px;
-    border-radius:30px;
-    margin-bottom:20px;
-    font-weight:bold;
-}
-
-.lesson-title{
-    font-size:45px;
-    margin-bottom:15px;
-}
-
-.lesson-description{
-    color:#94a3b8;
-    font-size:18px;
-    line-height:1.7;
-}
-
-.progress-section{
-    background:#111827;
-    padding:20px;
-    border-radius:18px;
-    margin-bottom:30px;
-}
-
-.progress-bar{
-    height:10px;
-    background:#1e293b;
-    border-radius:20px;
-    overflow:hidden;
-    margin-top:12px;
-}
-
-.progress-fill{
-    height:100%;
-    background:linear-gradient(
-        90deg,
-        #22c55e,
-        #16a34a
-    );
-}
-
-.content-grid{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:30px;
-}
-
-.video-section{
-    background:#111827;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.video-thumbnail{
-    width:100%;
-}
-
-.video-info{
-    padding:25px;
-}
-
-.watch-btn{
-    display:inline-block;
-    margin-top:20px;
-    background:#22c55e;
-    color:white;
-    padding:14px 26px;
-    border-radius:12px;
-    text-decoration:none;
-    font-weight:600;
-}
-
-.tabs{
-    display:flex;
-    gap:10px;
-    margin-top:30px;
-    flex-wrap:wrap;
-}
-
-.tab-btn{
-    padding:12px 22px;
-    background:#1e293b;
-    border:none;
-    color:white;
-    border-radius:12px;
-    cursor:pointer;
-}
-
-.tab-btn.active{
-    background:#22c55e;
-}
-
-.tab-content{
-    display:none;
-    margin-top:20px;
-}
-
-.tab-content.active{
-    display:block;
-}
-
-.section-box{
-    background:#111827;
-    padding:25px;
-    border-radius:20px;
-    line-height:1.8;
-}
-
-.sidebar{
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-}
-
-.xp-card{
-    background:linear-gradient(
-        135deg,
-        #22c55e,
-        #16a34a
-    );
-    padding:30px;
-    border-radius:20px;
-    text-align:center;
-}
-
-.complete-btn{
-    width:100%;
-    padding:16px;
-    border:none;
-    border-radius:14px;
-    background:#22c55e;
-    color:white;
-    font-size:18px;
-    cursor:pointer;
-    font-weight:600;
-    text-decoration:none;
-    text-align:center;
-    display:block;
-}
-
-.completed-box{
-    width:100%;
-    padding:16px;
-    border-radius:14px;
-    background:#16a34a;
-    text-align:center;
-    font-weight:bold;
-}
-
-.lesson-nav{
-    background:#111827;
-    padding:25px;
-    border-radius:20px;
-}
-
-.lesson-item{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px;
-    margin-top:10px;
-    background:#1e293b;
-    border-radius:12px;
-    text-decoration:none;
-    color:white;
-}
-
-.lesson-item.active{
-    border:2px solid #22c55e;
-}
-
-.assignment-box{
-    background:#0f172a;
-    padding:20px;
-    border-radius:16px;
-    margin-top:20px;
-}
-
-.submit-btn{
-    background:#22c55e;
-    color:white;
-    border:none;
-    padding:14px 24px;
-    border-radius:12px;
-    margin-top:20px;
-    cursor:pointer;
-    font-size:16px;
-    font-weight:600;
-}
-
-.quiz-card{
-    background:#0f172a;
-    padding:20px;
-    border-radius:16px;
-    margin-bottom:20px;
-}
-
-.score-box{
-    margin-top:20px;
-    background:#22c55e20;
-    padding:20px;
-    border-radius:16px;
-    color:#22c55e;
-    font-size:22px;
-    font-weight:bold;
-}
-
-@media(max-width:900px){
-
-    .content-grid{
-        grid-template-columns:1fr;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
     }
 
-    .lesson-title{
-        font-size:32px;
+    body {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        color: #e2e8f0;
+        min-height: 100vh;
     }
-}
 
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.04) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Header */
+    .lesson-header {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(20px);
+        padding: 50px 40px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .day-badge {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        display: inline-block;
+        padding: 10px 24px;
+        border-radius: 50px;
+        margin-bottom: 25px;
+        font-weight: 700;
+        font-size: 14px;
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .lesson-title {
+        font-size: 48px;
+        margin-bottom: 20px;
+        color: #e2e8f0;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .lesson-description {
+        color: #cbd5e1;
+        font-size: 20px;
+        line-height: 1.7;
+    }
+
+    /* Progress Section */
+    .progress-section {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(20px);
+        padding: 25px 30px;
+        border-radius: 16px;
+        margin-bottom: 40px;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .progress-section h3 {
+        color: #e2e8f0;
+        margin-bottom: 15px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .progress-bar {
+        height: 12px;
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(34, 197, 94, 0.1);
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+        border-radius: 20px;
+        box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+    }
+
+    /* Content Grid */
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2.5fr 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    /* Video Section */
+    .video-section {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        transition: 0.4s;
+    }
+
+    .video-section:hover {
+        border-color: rgba(34, 197, 94, 0.4);
+        box-shadow: 0 8px 32px rgba(34, 197, 94, 0.1);
+    }
+
+    .video-thumbnail {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+    }
+
+    .video-info {
+        padding: 30px;
+    }
+
+    .video-info h2 {
+        color: #e2e8f0;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    .watch-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        padding: 16px 32px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: 0.3s;
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .watch-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+    }
+
+    /* Tabs */
+    .tabs {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 14px 26px;
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        color: #cbd5e1;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+        font-size: 15px;
+    }
+
+    .tab-btn:hover {
+        border-color: rgba(34, 197, 94, 0.4);
+        color: #22c55e;
+    }
+
+    .tab-btn.active {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        border-color: transparent;
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+
+    /* Tab Content */
+    .tab-content {
+        display: none;
+        margin-top: 30px;
+        animation: fadeInUp 0.4s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .section-box {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(20px);
+        padding: 35px;
+        border-radius: 16px;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        line-height: 1.8;
+    }
+
+    .section-box h2 {
+        color: #e2e8f0;
+        margin-bottom: 25px;
+        font-size: 24px;
+    }
+
+    .section-box p {
+        color: #cbd5e1;
+        margin-bottom: 15px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .xp-card {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        padding: 35px 25px;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+    }
+
+    .xp-card h1 {
+        font-size: 48px;
+        margin-bottom: 15px;
+        color: white;
+    }
+
+    .xp-card p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 16px;
+    }
+
+    .complete-btn {
+        width: 100%;
+        padding: 18px 20px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        font-weight: 700;
+        text-decoration: none;
+        text-align: center;
+        display: block;
+        transition: 0.3s;
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .complete-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+    }
+
+    .completed-box {
+        width: 100%;
+        padding: 18px 20px;
+        border-radius: 12px;
+        background: rgba(34, 197, 94, 0.2);
+        border: 2px solid #22c55e;
+        text-align: center;
+        font-weight: 700;
+        color: #86efac;
+        font-size: 18px;
+    }
+
+    .lesson-nav {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(20px);
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .lesson-nav h2 {
+        color: #e2e8f0;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+
+    .lesson-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        margin-top: 10px;
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 12px;
+        text-decoration: none;
+        color: #cbd5e1;
+        transition: 0.3s;
+        border: 1px solid rgba(34, 197, 94, 0.1);
+    }
+
+    .lesson-item:hover {
+        border-color: rgba(34, 197, 94, 0.3);
+        color: #22c55e;
+    }
+
+    .lesson-item.active {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+        border: 2px solid #22c55e;
+        color: #86efac;
+    }
+
+    /* Assignment & Quiz */
+    .assignment-box {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 25px;
+        border-radius: 14px;
+        margin-top: 20px;
+        border: 1px solid rgba(34, 197, 94, 0.1);
+    }
+
+    .assignment-box h3 {
+        color: #e2e8f0;
+        margin-bottom: 15px;
+        font-size: 20px;
+    }
+
+    .assignment-box p {
+        color: #cbd5e1;
+    }
+
+    .submit-btn {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        border: none;
+        padding: 16px 28px;
+        border-radius: 12px;
+        margin-top: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 700;
+        transition: 0.3s;
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+    }
+
+    .quiz-card {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 25px;
+        border-radius: 14px;
+        margin-bottom: 25px;
+        border: 1px solid rgba(34, 197, 94, 0.1);
+    }
+
+    .quiz-card h3 {
+        color: #e2e8f0;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+
+    .quiz-card label {
+        display: block;
+        margin-bottom: 15px;
+        color: #cbd5e1;
+        cursor: pointer;
+        padding: 12px;
+        border-radius: 8px;
+        transition: 0.2s;
+    }
+
+    .quiz-card label:hover {
+        background: rgba(34, 197, 94, 0.1);
+        color: #86efac;
+    }
+
+    .quiz-card input[type="radio"] {
+        margin-right: 12px;
+        accent-color: #22c55e;
+    }
+
+    .score-box {
+        margin-top: 30px;
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+        padding: 30px;
+        border-radius: 14px;
+        color: #86efac;
+        font-size: 24px;
+        font-weight: 700;
+        border: 2px solid rgba(34, 197, 94, 0.3);
+        text-align: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .lesson-title {
+            font-size: 36px;
+        }
+
+        .lesson-header {
+            padding: 35px 25px;
+        }
+
+        .video-thumbnail {
+            height: 280px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .lesson-title {
+            font-size: 28px;
+        }
+
+        .lesson-description {
+            font-size: 16px;
+        }
+
+        .video-thumbnail {
+            height: 200px;
+        }
+
+        .tabs {
+            gap: 8px;
+        }
+
+        .tab-btn {
+            padding: 12px 18px;
+            font-size: 13px;
+        }
+
+        .section-box {
+            padding: 20px;
+        }
+
+        .xp-card {
+            padding: 25px;
+        }
+
+        .xp-card h1 {
+            font-size: 36px;
+        }
+    }
 </style>
 
 <div class="container">
 
     <!-- Header -->
-
     <div class="lesson-header">
-
-        <div class="day-badge">
-            Day {{ lesson.day }}
-        </div>
-
-        <h1 class="lesson-title">
-            {{ lesson.title }}
-        </h1>
-
-        <p class="lesson-description">
-            {{ lesson.description }}
-        </p>
-
+        <div class="day-badge">Day {{ lesson.day }}</div>
+        <h1 class="lesson-title">{{ lesson.title }}</h1>
+        <p class="lesson-description">{{ lesson.description }}</p>
     </div>
 
     <!-- Progress -->
-
     <div class="progress-section">
-
-        <h3>
-            Course Progress
-        </h3>
-
+        <h3>Course Progress</h3>
         <div class="progress-bar">
-
-            <div
-class="progress-fill"
-
-style="
-width:
-{{ progress } } %;
-"
-
-></div>
-
+            <div class="progress-fill" style="width: {{ progress }}%;"></div>
         </div>
-
     </div>
 
     <div class="content-grid">
-
-        <!-- Main -->
-
+        <!-- Main Content -->
         <div>
-
             <!-- Video -->
-
             <div class="video-section">
-
-                <img
-                src="https://img.youtube.com/vi/{{ lesson.video_url|cut:'https://www.youtube.com/watch?v=' }}/maxresdefault.jpg"
-                class="video-thumbnail"
-                >
-
+                <img src="https://img.youtube.com/vi/{{ lesson.video_url|cut:'https://www.youtube.com/watch?v=' }}/maxresdefault.jpg" class="video-thumbnail" alt="Video thumbnail">
                 <div class="video-info">
-
-                    <h2>
-                        🎥 Watch Tutorial
-                    </h2>
-
-                    <a
-                    href="{{ lesson.video_url }}"
-                    target="_blank"
-                    class="watch-btn"
-                    >
-                        ▶ Watch Video
-                    </a>
-
+                    <h2>🎥 Watch Tutorial</h2>
+                    <a href="{{ lesson.video_url }}" target="_blank" class="watch-btn">▶ Watch Video</a>
                 </div>
-
             </div>
 
             <!-- Tabs -->
-
             <div class="tabs">
-
-                <button
-                class="tab-btn active"
-                onclick="openTab(event,'notes')"
-                >
-                    Notes
-                </button>
-
-                <button
-                class="tab-btn"
-                onclick="openTab(event,'quiz')"
-                >
-                    Quiz
-                </button>
-
-                <button
-                class="tab-btn"
-                onclick="openTab(event,'assignment')"
-                >
-                    Assignment
-                </button>
-
+                <button class="tab-btn active" onclick="openTab(event,'notes')">📘 Notes</button>
+                <button class="tab-btn" onclick="openTab(event,'quiz')">🧠 Quiz</button>
+                <button class="tab-btn" onclick="openTab(event,'assignment')">📝 Assignment</button>
             </div>
 
-            <!-- Notes -->
-
-            <div
-            id="notes"
-            class="tab-content active"
-            >
-
+            <!-- Notes Tab -->
+            <div id="notes" class="tab-content active">
                 <div class="section-box">
-
-                    <h2>
-                        📘 Notes
-                    </h2>
-
-                    <br>
-
+                    <h2>Lesson Notes</h2>
                     {{ lesson.notes|linebreaks }}
-
                 </div>
-
             </div>
 
-            <!-- Quiz -->
-
-            <div
-            id="quiz"
-            class="tab-content"
-            >
-
+            <!-- Quiz Tab -->
+            <div id="quiz" class="tab-content">
                 <div class="section-box">
-
-                    <h2>
-                        🧠 Quiz Questions
-                    </h2>
-
-                    <br>
-
+                    <h2>Quiz Questions</h2>
                     <form method="POST">
-
                         {% csrf_token %}
-
                         {% for quiz in quiz_questions %}
-
                         <div class="quiz-card">
-
-                            <h3>
-
-                                Q{{ forloop.counter }}.
-                                {{ quiz.question }}
-
-                            </h3>
-
-                            <br>
-
-                            <label>
-
-                                <input
-                                type="radio"
-                                name="quiz_{{ quiz.id }}"
-                                value="{{ quiz.option1 }}"
-                                >
-
-                                {{ quiz.option1 }}
-
-                            </label>
-
-                            <br><br>
-
-                            <label>
-
-                                <input
-                                type="radio"
-                                name="quiz_{{ quiz.id }}"
-                                value="{{ quiz.option2 }}"
-                                >
-
-                                {{ quiz.option2 }}
-
-                            </label>
-
-                            <br><br>
-
-                            <label>
-
-                                <input
-                                type="radio"
-                                name="quiz_{{ quiz.id }}"
-                                value="{{ quiz.option3 }}"
-                                >
-
-                                {{ quiz.option3 }}
-
-                            </label>
-
-                            <br><br>
-
-                            <label>
-
-                                <input
-                                type="radio"
-                                name="quiz_{{ quiz.id }}"
-                                value="{{ quiz.option4 }}"
-                                >
-
-                                {{ quiz.option4 }}
-
-                            </label>
-
+                            <h3>Q{{ forloop.counter }}. {{ quiz.question }}</h3>
+                            <label><input type="radio" name="quiz_{{ quiz.id }}" value="{{ quiz.option1 }}"> {{ quiz.option1 }}</label>
+                            <label><input type="radio" name="quiz_{{ quiz.id }}" value="{{ quiz.option2 }}"> {{ quiz.option2 }}</label>
+                            <label><input type="radio" name="quiz_{{ quiz.id }}" value="{{ quiz.option3 }}"> {{ quiz.option3 }}</label>
+                            <label><input type="radio" name="quiz_{{ quiz.id }}" value="{{ quiz.option4 }}"> {{ quiz.option4 }}</label>
                         </div>
-
                         {% endfor %}
-
                         {% if not existing_attempt %}
-
-                        <button
-                        type="submit"
-                        class="submit-btn"
-                        >
-
-                            Submit Quiz
-
-                        </button>
-
+                        <button type="submit" class="submit-btn">Submit Quiz</button>
                         {% endif %}
-
                     </form>
-
                     {% if score is not None %}
-
-                    <div class="score-box">
-
-                        🎉 Your Score:
-                        {{ score }}/{{ quiz_questions|length }}
-
-                    </div>
-
+                    <div class="score-box">🎉 Your Score: {{ score }}/{{ quiz_questions|length }}</div>
                     {% endif %}
-
                 </div>
-
             </div>
 
-            <!-- Assignment -->
-
-            <div
-            id="assignment"
-            class="tab-content"
-            >
-
+            <!-- Assignment Tab -->
+            <div id="assignment" class="tab-content">
                 <div class="section-box">
-
-                    <h2>
-                        📝 Assignment
-                    </h2>
-
-                    <br>
-
+                    <h2>Assignment</h2>
                     <div class="assignment-box">
-
-                        <h3>
-                            {{ lesson.assignment_title }}
-                        </h3>
-
-                        <br>
-
+                        <h3>{{ lesson.assignment_title }}</h3>
                         {{ lesson.assignment_description|linebreaks }}
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
 
         <!-- Sidebar -->
-
         <div class="sidebar">
-
-            <!-- XP -->
-
+            <!-- XP Card -->
             <div class="xp-card">
-
-                <h1>
-                    +150 XP
-                </h1>
-
-                <p>
-                    Complete to Earn
-                </p>
-
+                <h1>+150 XP</h1>
+                <p>Complete to Earn</p>
             </div>
 
-            <!-- Complete -->
-
+            <!-- Complete Button -->
             {% if completed %}
-
-                <div class="completed-box">
-
-                    ✅ Lesson Completed
-
-                </div>
-
+                <div class="completed-box">✅ Lesson Completed</div>
             {% else %}
-
-                <a
-                href="/complete-lesson/{{ lesson.id }}/"
-                class="complete-btn"
-                >
-
-                    Mark as Complete
-
-                </a>
-
+                <a href="/complete-lesson/{{ lesson.id }}/" class="complete-btn">Mark as Complete</a>
             {% endif %}
 
-            <!-- Navigation -->
-
+            <!-- Lesson Navigation -->
             <div class="lesson-nav">
-
-                <h2>
-                    Course Lessons
-                </h2>
-
+                <h2>Course Lessons</h2>
                 {% for item in lessons %}
-
-                <a
-                href="/lesson/{{ item.id }}/"
-
-                class="lesson-item
-                {% if item.id == lesson.id %}
-                active
-                {% endif %}
-                "
-
-                >
-
-                    <span>
-
-                        Day {{ item.day }}
-                        -
-                        {{ item.title }}
-
-                    </span>
-
+                <a href="/lesson/{{ item.id }}/" class="lesson-item {% if item.id == lesson.id %}active{% endif %}">
+                    <span>Day {{ item.day }} - {{ item.title }}</span>
                 </a>
-
                 {% endfor %}
-
             </div>
-
         </div>
-
     </div>
 
 </div>
 
 <script>
-
 function openTab(event, tabId){
-
-    document.querySelectorAll(
-        '.tab-content'
-    ).forEach(tab => {
-
+    document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active')
-
     })
-
-    document.querySelectorAll(
-        '.tab-btn'
-    ).forEach(btn => {
-
+    document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active')
-
     })
-
-    document.getElementById(
-        tabId
-    ).classList.add('active')
-
+    document.getElementById(tabId).classList.add('active')
     event.currentTarget.classList.add('active')
 }
-
 </script>
 
 {% endblock %}

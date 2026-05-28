@@ -4,153 +4,212 @@
 <head>
 
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>My Learning</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Learning - 30DaysChallenge</title>
 
     <style>
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
-        body{
-            background:#0f172a;
-            color:white;
-            padding:40px;
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #e2e8f0;
+            padding: 60px 40px;
         }
 
-        h1{
-            margin-bottom:40px;
-            font-size:45px;
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .course-box{
-            background:#111827;
-            padding:35px;
-            border-radius:24px;
-            margin-bottom:40px;
-            box-shadow:0 10px 30px rgba(0,0,0,0.3);
+        h1 {
+            margin-bottom: 50px;
+            font-size: 48px;
+            color: #e2e8f0;
+            position: relative;
+            z-index: 2;
         }
 
-        .course-title{
-            font-size:32px;
-            margin-bottom:10px;
-            color:#22c55e;
+        .course-box {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 24px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
         }
 
-        .days{
-            color:#cbd5e1;
-            margin-bottom:20px;
+        .course-title {
+            font-size: 36px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .lesson{
-            background:#1e293b;
-            padding:25px;
-            border-radius:18px;
-            margin-top:25px;
+        .days {
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            font-size: 16px;
         }
 
-        .lesson h3{
-            margin-bottom:15px;
-            color:#38bdf8;
-            font-size:26px;
+        .lesson {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            padding: 35px;
+            border-radius: 20px;
+            margin-top: 30px;
+            transition: 0.3s;
         }
 
-        .lesson p{
-            line-height:1.7;
+        .lesson:hover {
+            border-color: rgba(34, 197, 94, 0.3);
+            background: rgba(15, 23, 42, 0.7);
         }
 
-        /* Video Card */
-
-        .video-card{
-            background:#0f172a;
-            border-radius:18px;
-            overflow:hidden;
-            margin-top:25px;
+        .lesson h3 {
+            margin-bottom: 15px;
+            color: #22c55e;
+            font-size: 26px;
         }
 
-        .thumbnail{
-            width:100%;
-            height:380px;
-            object-fit:cover;
+        .lesson p {
+            line-height: 1.7;
+            color: #cbd5e1;
+            margin-bottom: 10px;
         }
 
-        .video-content{
-            padding:20px;
+        .video-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 25px;
+            transition: 0.3s;
         }
 
-        .watch-btn{
-            display:inline-block;
-            margin-top:15px;
-            background:#ef4444;
-            color:white;
-            text-decoration:none;
-            padding:14px 26px;
-            border-radius:12px;
-            font-weight:600;
-            transition:0.3s;
+        .video-card:hover {
+            border-color: rgba(34, 197, 94, 0.3);
         }
 
-        .watch-btn:hover{
-            background:#dc2626;
-            transform:translateY(-2px);
+        .thumbnail {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
         }
 
-        /* Notes + Quiz */
-
-        .section{
-            margin-top:25px;
-            background:#0f172a;
-            padding:20px;
-            border-radius:14px;
+        .video-content {
+            padding: 25px;
+            background: rgba(15, 23, 42, 0.3);
         }
 
-        .section h4{
-            margin-bottom:15px;
-            color:#facc15;
-            font-size:22px;
+        .video-content h4 {
+            margin-bottom: 15px;
+            color: #e2e8f0;
+            font-size: 18px;
         }
 
-        .section p{
-            color:#e2e8f0;
-            line-height:1.8;
+        .watch-btn {
+            display: inline-block;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.2);
         }
 
-        .quiz-answer{
-            margin-top:15px;
-            color:#22c55e;
-            font-weight:bold;
+        .watch-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.4);
         }
 
-        /* Responsive */
+        .section {
+            margin-top: 25px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            padding: 25px;
+            border-radius: 16px;
+        }
 
-        @media(max-width:768px){
+        .section h4 {
+            margin-bottom: 15px;
+            color: #fbbf24;
+            font-size: 18px;
+            font-weight: 700;
+        }
 
-            body{
-                padding:20px;
+        .section p {
+            color: #cbd5e1;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .quiz-answer {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 3px solid #22c55e;
+            border-radius: 8px;
+            color: #86efac;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+
+            body {
+                padding: 40px 20px;
             }
 
-            h1{
-                font-size:34px;
+            h1 {
+                font-size: 36px;
+                margin-bottom: 40px;
             }
 
-            .course-title{
-                font-size:26px;
+            .course-box {
+                padding: 30px;
             }
 
-            .lesson h3{
-                font-size:22px;
+            .course-title {
+                font-size: 28px;
             }
 
-            .thumbnail{
-                height:220px;
+            .lesson {
+                padding: 25px;
             }
+
+            .lesson h3 {
+                font-size: 22px;
+            }
+
+            .thumbnail {
+                height: 220px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
         }
 
     </style>
@@ -163,99 +222,68 @@
 
 {% for item in data %}
 
-<div class="course-box">
+    <div class="course-box">
 
-    <h2 class="course-title">
-        {{ item.course.title }}
-    </h2>
+        <h2 class="course-title">{{ item.course.title }}</h2>
 
-    <p class="days">
-        📅 Days Unlocked:
-        {{ item.days_passed }}
-    </p>
+        <p class="days">📅 Days Unlocked: {{ item.days_passed }}</p>
 
-    {% for lesson in item.lessons %}
+        {% for lesson in item.lessons %}
 
-    <div class="lesson">
+            <div class="lesson">
 
-        <h3>
-            Day {{ lesson.day }} :
-            {{ lesson.title }}
-        </h3>
+                <h3>Day {{ lesson.day }}: {{ lesson.title }}</h3>
 
-        <p>
-            {{ lesson.description }}
-        </p>
+                <p>{{ lesson.description }}</p>
 
-        <!-- Video Section -->
+                <div class="video-card">
 
-        <div class="video-card">
+                    <img
+                        src="https://img.youtube.com/vi/{{ lesson.video_url|cut:'https://www.youtube.com/watch?v=' }}/0.jpg"
+                        class="thumbnail"
+                        alt="{{ lesson.title }}"
+                    >
 
-            <img
-                src="https://img.youtube.com/vi/{{ lesson.video_url|cut:'https://www.youtube.com/watch?v=' }}/0.jpg"
-                class="thumbnail"
-            >
+                    <div class="video-content">
 
-            <div class="video-content">
+                        <h4>🎥 Watch Lesson Video</h4>
 
-                <h4>
-                    🎥 Watch Lesson Video
-                </h4>
+                        <a href="{{ lesson.video_url }}" target="_blank" class="watch-btn">
+                            ▶ Watch on YouTube
+                        </a>
 
-                <a
-                    href="{{ lesson.video_url }}"
-                    target="_blank"
-                    class="watch-btn"
-                >
-                    ▶ Watch on YouTube
-                </a>
+                    </div>
 
-            </div>
+                </div>
 
-        </div>
+                <div class="section">
 
-        <!-- Notes -->
+                    <h4>📘 Session Notes</h4>
 
-        <div class="section">
+                    <p>{{ lesson.notes }}</p>
 
-            <h4>
-                📘 Session Notes
-            </h4>
+                </div>
 
-            <p>
-                {{ lesson.notes }}
-            </p>
+                <div class="section">
 
-        </div>
+                    <h4>🧠 Quiz Question</h4>
 
-        <!-- Quiz -->
+                    <p>{{ lesson.quiz_question }}</p>
 
-        <div class="section">
+                    <div class="quiz-answer">
+                        ✅ Answer: {{ lesson.quiz_answer }}
+                    </div>
 
-            <h4>
-                🧠 Quiz Question
-            </h4>
-
-            <p>
-                {{ lesson.quiz_question }}
-            </p>
-
-            <div class="quiz-answer">
-
-                ✅ Answer:
-                {{ lesson.quiz_answer }}
+                </div>
 
             </div>
 
-        </div>
+        {% endfor %}
 
     </div>
-
-    {% endfor %}
-
-</div>
 
 {% endfor %}
 
 </body>
+
 </html>

@@ -1,102 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Payment</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll Now - 30DaysChallenge</title>
     <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         }
 
-        body{
-            background:#f8fafc;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            min-height:100vh;
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
         }
 
-        .card{
-            background:white;
-            padding:50px;
-            border-radius:24px;
-            width:420px;
-            text-align:center;
-            box-shadow:0 10px 40px rgba(0,0,0,0.1);
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .logo{
-            font-size:22px;
-            font-weight:800;
-            color:#22c55e;
-            margin-bottom:30px;
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.8s ease-out;
         }
 
-        .course-title{
-            font-size:26px;
-            font-weight:700;
-            color:#0f172a;
-            margin-bottom:20px;
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .price-box{
-            margin:25px 0;
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 35px;
         }
 
-        .original{
-            font-size:18px;
-            color:#94a3b8;
-            text-decoration:line-through;
+        .course-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #e2e8f0;
+            margin-bottom: 30px;
+            line-height: 1.3;
         }
 
-        .final{
-            font-size:52px;
-            font-weight:800;
-            color:#22c55e;
+        .price-box {
+            margin: 35px 0;
         }
 
-        .features{
-            background:#f8fafc;
-            border-radius:16px;
-            padding:20px;
-            margin:25px 0;
-            text-align:left;
+        .original {
+            font-size: 18px;
+            color: #94a3b8;
+            text-decoration: line-through;
+            margin-bottom: 10px;
         }
 
-        .features p{
-            color:#475569;
-            margin-bottom:10px;
-            font-size:15px;
+        .final {
+            font-size: 64px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
         }
 
-        .features p:last-child{
-            margin-bottom:0;
+        .discount-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 15px;
         }
 
-        .pay-btn{
-            width:100%;
-            padding:18px;
-            background:#22c55e;
-            border:none;
-            border-radius:16px;
-            color:white;
-            font-size:20px;
-            font-weight:700;
-            cursor:pointer;
-            transition:0.3s;
+        .features {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 35px 0;
+            text-align: left;
+            border: 1px solid rgba(34, 197, 94, 0.2);
         }
 
-        .pay-btn:hover{
-            background:#16a34a;
-            transform:translateY(-2px);
+        .features p {
+            color: #cbd5e1;
+            margin-bottom: 16px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .secure{
-            margin-top:18px;
-            color:#94a3b8;
-            font-size:13px;
+        .features p:last-child {
+            margin-bottom: 0;
+        }
+
+        .features p::before {
+            content: '✓';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .pay-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+            font-family: inherit;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(34, 197, 94, 0.5);
+        }
+
+        .pay-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .secure {
+            margin-top: 25px;
+            color: #94a3b8;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 35px 25px;
+            }
+
+            .course-title {
+                font-size: 24px;
+            }
+
+            .final {
+                font-size: 48px;
+            }
+
+            .features {
+                padding: 25px;
+            }
+
+            .features p {
+                font-size: 14px;
+                margin-bottom: 12px;
+            }
+
+            .pay-btn {
+                padding: 18px;
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -104,25 +213,20 @@
 <body>
 
 <div class="card">
-
-    <div class="logo">
-        ⚡ 30DaysChallenge
-    </div>
-
-    <div class="course-title">
-        {{ course.title }}
-    </div>
+    <div class="logo">⚡ 30DaysChallenge</div>
+    <div class="course-title">{{ course.title }}</div>
 
     <div class="price-box">
         <div class="original">₹199</div>
         <div class="final">₹149</div>
+        <div class="discount-badge">25% OFF</div>
     </div>
 
     <div class="features">
-        <p>✅ 30 Days Full Access</p>
-        <p>✅ All Video Lessons</p>
-        <p>✅ Quizzes & Assignments</p>
-        <p>✅ XP, Badges & Certificate</p>
+        <p>30 Days Full Access</p>
+        <p>All Video Lessons</p>
+        <p>Quizzes & Assignments</p>
+        <p>XP, Badges & Certificate</p>
     </div>
 
     <button class="pay-btn" id="rzp-button">
@@ -132,34 +236,24 @@
     <div class="secure">
         🔒 Secure payment via Razorpay
     </div>
-
 </div>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
 var options = {
-
     "key": "{{ razorpay_key }}",
-
     "amount": "{{ payment.amount }}",
-
     "currency": "INR",
-
     "name": "30DaysChallenge",
-
     "description": "{{ course.title }}",
-
     "order_id": "{{ payment.id }}",
-
     callback_url: "{{ request.scheme }}://{{ request.get_host }}{% url 'payment_success' %}",
     "redirect": true,
-
     "prefill": {
         "name": "{{ request.user.username }}",
         "email": "{{ request.user.email }}"
     },
-
     "theme": {
         "color": "#22c55e"
     }

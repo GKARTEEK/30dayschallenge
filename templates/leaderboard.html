@@ -4,386 +4,240 @@
 
 <style>
 
-.page-title{
-
-    font-size:50px;
-
-    font-weight:800;
-
-    margin-bottom:40px;
-
-    text-align:center;
-}
-
-/* =========================
-   LEADERBOARD BOX
-========================= */
-
-.leaderboard-box{
-
-    max-width:1100px;
-
-    margin:auto;
-
-    background:#111827;
-
-    border-radius:30px;
-
-    overflow:hidden;
-
-    border:1px solid #1e293b;
-}
-
-.top-header{
-
-    background:linear-gradient(
-        90deg,
-        #22c55e,
-        #16a34a
-    );
-
-    padding:25px;
-
-    text-align:center;
-
-    font-size:28px;
-
-    font-weight:800;
-}
-
-/* =========================
-   USER ROW
-========================= */
-
-.user-row{
-
-    display:grid;
-
-    grid-template-columns:
-    100px
-    1.5fr
-    150px
-    150px
-    150px;
-
-    align-items:center;
-
-    padding:25px;
-
-    border-bottom:1px solid #1e293b;
-
-    transition:0.3s;
-}
-
-.user-row:hover{
-
-    background:#1e293b;
-}
-
-/* =========================
-   RANK
-========================= */
-
-.rank{
-
-    font-size:28px;
-
-    font-weight:800;
-
-    color:#22c55e;
-}
-
-/* =========================
-   USERNAME
-========================= */
-
-.user-section{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-}
-
-.username{
-
-    font-size:22px;
-
-    font-weight:700;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-}
-
-.you-badge{
-
-    background:#22c55e;
-
-    color:white;
-
-    padding:6px 14px;
-
-    border-radius:999px;
-
-    font-size:12px;
-
-    font-weight:700;
-}
-
-/* =========================
-   BADGES
-========================= */
-
-.badges{
-
-    display:flex;
-
-    gap:10px;
-
-    flex-wrap:wrap;
-}
-
-.badge{
-
-    background:#22c55e20;
-
-    color:#22c55e;
-
-    padding:8px 14px;
-
-    border-radius:999px;
-
-    font-size:13px;
-
-    font-weight:700;
-}
-
-/* =========================
-   STATS
-========================= */
-
-.stat{
-
-    text-align:center;
-}
-
-.stat h3{
-
-    font-size:24px;
-
-    color:#22c55e;
-}
-
-.stat p{
-
-    color:#94a3b8;
-
-    margin-top:5px;
-}
-
-/* =========================
-   TOP 3 COLORS
-========================= */
-
-.top-1{
-
-    background:rgba(255,215,0,0.08);
-}
-
-.top-2{
-
-    background:rgba(192,192,192,0.06);
-}
-
-.top-3{
-
-    background:rgba(205,127,50,0.06);
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width:950px){
-
-    .user-row{
-
-        grid-template-columns:1fr;
-
-        gap:25px;
-
-        text-align:center;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
     }
 
-    .user-section{
-
-        align-items:center;
+    body {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        color: #e2e8f0;
+        padding: 60px 40px;
     }
 
-    .badges{
-
-        justify-content:center;
+    .page-title {
+        font-size: 48px;
+        font-weight: 800;
+        margin-bottom: 50px;
+        text-align: center;
+        color: #e2e8f0;
     }
 
-    .page-title{
-
-        font-size:36px;
+    .leaderboard-box {
+        max-width: 1200px;
+        margin: auto;
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
-}
+
+    .top-header {
+        background: linear-gradient(90deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.05) 100%);
+        border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+        padding: 30px 40px;
+        font-size: 28px;
+        font-weight: 800;
+        color: #e2e8f0;
+    }
+
+    .user-row {
+        display: grid;
+        grid-template-columns: 100px 1.5fr 150px 150px 150px;
+        align-items: center;
+        padding: 25px 40px;
+        border-bottom: 1px solid rgba(34, 197, 94, 0.1);
+        transition: 0.3s;
+    }
+
+    .user-row:hover {
+        background: rgba(34, 197, 94, 0.05);
+        border-color: rgba(34, 197, 94, 0.2);
+    }
+
+    .rank {
+        font-size: 28px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .user-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .username {
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #e2e8f0;
+    }
+
+    .you-badge {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        color: #86efac;
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 12px;
+        font-weight: 700;
+        transition: 0.3s;
+    }
+
+    .badge:hover {
+        background: rgba(34, 197, 94, 0.2);
+    }
+
+    .stat {
+        text-align: center;
+    }
+
+    .stat h3 {
+        font-size: 24px;
+        background: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+    }
+
+    .stat p {
+        color: #cbd5e1;
+        font-size: 13px;
+    }
+
+    .top-1 {
+        background: rgba(255, 215, 0, 0.05);
+        border-bottom-color: rgba(255, 215, 0, 0.15);
+    }
+
+    .top-2 {
+        background: rgba(192, 192, 192, 0.04);
+        border-bottom-color: rgba(192, 192, 192, 0.1);
+    }
+
+    .top-3 {
+        background: rgba(205, 127, 50, 0.04);
+        border-bottom-color: rgba(205, 127, 50, 0.1);
+    }
+
+    @media (max-width: 950px) {
+
+        body {
+            padding: 40px 20px;
+        }
+
+        .user-row {
+            grid-template-columns: 1fr;
+            gap: 20px;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .user-section {
+            align-items: center;
+        }
+
+        .badges {
+            justify-content: center;
+        }
+
+        .page-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+        }
+
+        .top-header {
+            padding: 20px;
+            font-size: 22px;
+        }
+
+        .stat {
+            padding: 15px 0;
+        }
+
+    }
 
 </style>
 
-<h1 class="page-title">
-
-    🏆 Leaderboard
-
-</h1>
+<h1 class="page-title">🏆 Leaderboard</h1>
 
 <div class="leaderboard-box">
 
-    <div class="top-header">
-
-        Top Coders 🚀
-
-    </div>
+    <div class="top-header">Top Coders</div>
 
     {% for profile in profiles %}
 
-    <div class="user-row
+        <div class="user-row {% if forloop.counter == 1 %}top-1{% endif %} {% if forloop.counter == 2 %}top-2{% endif %} {% if forloop.counter == 3 %}top-3{% endif %}">
 
-    {% if forloop.counter == 1 %}
-        top-1
-    {% endif %}
+            <div class="rank">#{{ forloop.counter }}</div>
 
-    {% if forloop.counter == 2 %}
-        top-2
-    {% endif %}
+            <div class="user-section">
 
-    {% if forloop.counter == 3 %}
-        top-3
-    {% endif %}
+                <div class="username">
+                    {{ profile.user.username }}
+                    {% if profile.user == request.user %}
+                        <span class="you-badge">You</span>
+                    {% endif %}
+                </div>
 
-    ">
+                <div class="badges">
 
-        <!-- RANK -->
+                    {% for badge in profile.badge_set.all %}
 
-        <div class="rank">
+                        <div class="badge">{{ badge.icon }} {{ badge.title }}</div>
 
-            #{{ forloop.counter }}
+                    {% empty %}
 
-        </div>
+                        <div style="color: #64748b; font-size: 12px;">No badges yet</div>
 
-        <!-- USER SECTION -->
-
-        <div class="user-section">
-
-            <div class="username">
-
-                {{ profile.user.username }}
-
-                {% if profile.user == request.user %}
-
-                    <span class="you-badge">
-
-                        You
-
-                    </span>
-
-                {% endif %}
-
-            </div>
-
-            <!-- BADGES -->
-
-            <div class="badges">
-
-                {% for badge in profile.badge_set.all %}
-
-                <div class="badge">
-
-                    {{ badge.icon }}
-                    {{ badge.title }}
+                    {% endfor %}
 
                 </div>
 
-                {% empty %}
+            </div>
 
-                <div
-                style="
-                color:#64748b;
-                font-size:14px;
-                "
-                >
+            <div class="stat">
+                <h3>⭐ {{ profile.xp }}</h3>
+                <p>XP</p>
+            </div>
 
-                    No badges yet
+            <div class="stat">
+                <h3>🔥 {{ profile.level }}</h3>
+                <p>Level</p>
+            </div>
 
-                </div>
-
-                {% endfor %}
-
+            <div class="stat">
+                <h3>✅ {{ profile.completed_lessons }}</h3>
+                <p>Completed</p>
             </div>
 
         </div>
-
-        <!-- XP -->
-
-        <div class="stat">
-
-            <h3>
-
-                ⭐ {{ profile.xp }}
-
-            </h3>
-
-            <p>
-
-                XP
-
-            </p>
-
-        </div>
-
-        <!-- LEVEL -->
-
-        <div class="stat">
-
-            <h3>
-
-                🔥 {{ profile.level }}
-
-            </h3>
-
-            <p>
-
-                Level
-
-            </p>
-
-        </div>
-
-        <!-- COMPLETED -->
-
-        <div class="stat">
-
-            <h3>
-
-                ✅ {{ profile.completed_lessons }}
-
-            </h3>
-
-            <p>
-
-                Completed
-
-            </p>
-
-        </div>
-
-    </div>
 
     {% endfor %}
 

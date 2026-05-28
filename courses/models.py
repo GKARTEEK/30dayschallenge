@@ -42,48 +42,87 @@ class Course(models.Model):
 
 class Enrollment(models.Model):
 
+    # =========================
+    # USER
+    # =========================
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE
     )
+
+    # =========================
+    # COURSE
+    # =========================
 
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE
     )
 
+    # =========================
+    # ENROLLED DATE
+    # =========================
+
     enrolled_at = models.DateField(
         auto_now_add=True
     )
 
+    # =========================
     # PAYMENT STATUS
+    # =========================
+
     is_paid = models.BooleanField(
         default=False
     )
 
+    # =========================
     # RAZORPAY PAYMENT ID
+    # =========================
+
     payment_id = models.CharField(
         max_length=255,
         blank=True,
         null=True
     )
 
+    # =========================
     # RAZORPAY ORDER ID
+    # =========================
+
     order_id = models.CharField(
         max_length=255,
         blank=True,
         null=True
     )
 
+    # =========================
     # ADMIN FREE ACCESS
+    # =========================
+
     is_free_access = models.BooleanField(
         default=False
     )
 
+    # =========================
+    # PREVENT DUPLICATES
+    # =========================
+
+    class Meta:
+
+        unique_together = ['user', 'course']
+
+    # =========================
+    # STRING REPRESENTATION
+    # =========================
+
     def __str__(self):
 
-        return f"{self.user.username} - {self.course.title}"
-        # =========================
+        return (
+            f"{self.user.username}"
+            f" - "
+            f"{self.course.title}"
+        )        # =========================
 # Lesson Model
 # =========================
 

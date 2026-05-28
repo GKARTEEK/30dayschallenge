@@ -145,6 +145,11 @@ class Lesson(models.Model):
         blank=True
     )
 
+    thumbnail = models.URLField(
+    blank=True,
+    null=True
+    )
+
     notes = models.TextField(
         blank=True
     )

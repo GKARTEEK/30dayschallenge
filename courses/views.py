@@ -663,7 +663,7 @@ def payment_page(request):
 
     # ₹1 TESTING
 
-    amount = 100
+    amount = 14900
 
     # =========================
     # CREATE ORDER

@@ -197,7 +197,7 @@ class QuizQuestion(models.Model):
     option4 = models.CharField(max_length=200)
 
     correct_answer = models.CharField(
-        max_length=10,
+        max_length=200,
         choices=[
             ('option1', 'Option 1'),
             ('option2', 'Option 2'),

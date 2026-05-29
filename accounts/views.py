@@ -10,13 +10,13 @@ from django.contrib.auth import (
 from django.contrib.auth.decorators import login_required
 
 from .models import ReferralProfile
-
-
 # =========================
 # REGISTER
 # =========================
 
 def register_view(request):
+
+    ref_code = request.GET.get('ref', '')
 
     if request.method == 'POST':
 
@@ -45,9 +45,8 @@ def register_view(request):
                 'register.html',
 
                 {
-
-                    'error':
-                    'Username already exists'
+                    'error': 'Username already exists',
+                    'ref_code': ref_code
                 }
             )
 
@@ -105,8 +104,14 @@ def register_view(request):
         return redirect('login')
 
     return render(
+
         request,
-        'register.html'
+
+        'register.html',
+
+        {
+            'ref_code': ref_code
+        }
     )
 
 

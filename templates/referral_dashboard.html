@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Referral Dashboard</title>
+</head>
+<body>
+
+<h1>Referral Dashboard</h1>
+
+<h3>
+Referral Code:
+{{ profile.referral_code }}
+</h3>
+
+<h3>
+Total Referrals:
+{{ profile.referral_count }}
+</h3>
+
+<h3>
+Total Earnings:
+₹{{ profile.earned_amount }}
+</h3>
+
+<hr>
+
+<h2>Referral Link</h2>
+
+<input
+    type="text"
+    value="https://30dayschallenge-production.up.railway.app/register/?ref={{ profile.referral_code }}"
+    readonly
+    style="width:500px;"
+>
+
+<hr>
+
+<h2>Joined Users</h2>
+
+<table border="1">
+
+<tr>
+    <th>Username</th>
+    <th>Date Joined</th>
+</tr>
+
+{% for user in referred_users %}
+
+<tr>
+    <td>{{ user.user.username }}</td>
+    <td>{{ user.created_at }}</td>
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="2">
+        No referrals yet
+    </td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

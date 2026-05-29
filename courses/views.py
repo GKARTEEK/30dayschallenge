@@ -3,13 +3,13 @@ from django.shortcuts import (
     redirect,
     get_object_or_404
 )
-
+from django.db.models import Count,Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-
+from accounts.models import ReferralProfile
 import razorpay
 import hmac
 import hashlib
@@ -550,7 +550,6 @@ def generate_certificate(request, course_id):
         context
     )
 
-
 # =========================
 # PROFILE PAGE
 # =========================
@@ -572,7 +571,7 @@ def profile_page(request):
 
     certificates = Enrollment.objects.filter(
         user=request.user,
-        is_paid=True        # ✅ Only show real paid enrollments
+        is_paid=True
     )
 
     total_users = UserProfile.objects.count()
@@ -581,13 +580,45 @@ def profile_page(request):
         xp__gt=profile.xp
     ).count() + 1
 
+    # =========================
+    # REFERRAL DATA
+    # =========================
+
+    referral_profile, created = ReferralProfile.objects.get_or_create(
+        user=request.user,
+        defaults={
+            'referral_code': request.user.username.upper()
+        }
+    )
+
+    referred_users = ReferralProfile.objects.filter(
+        referred_by=referral_profile
+    ).annotate(
+        enrolled_courses=Count(
+            'user__enrollment',
+            filter=Q(
+                user__enrollment__is_paid=True
+            )
+        )
+    )
+
+    total_enrollments = sum(
+        user.enrolled_courses
+        for user in referred_users
+    )
+
     context = {
         'profile': profile,
         'badges': badges,
         'posts': posts,
         'certificates': certificates,
         'rank': rank,
-        'total_users': total_users
+        'total_users': total_users,
+
+        # Referral
+        'referral_profile': referral_profile,
+        'referred_users': referred_users,
+        'total_enrollments': total_enrollments,
     }
 
     return render(
@@ -595,8 +626,6 @@ def profile_page(request):
         'profile.html',
         context
     )
-
-
 # =========================
 # PAYMENT PAGE
 # ✅ Creates temporary enrollment with order_id only
@@ -721,7 +750,7 @@ def payment_success(request):
         'course_lessons',
         course_id=course.id
     )
-    
+
 # =========================
 # STATIC PAGES
 # =========================

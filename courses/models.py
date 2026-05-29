@@ -60,6 +60,12 @@ class Enrollment(models.Model):
         on_delete=models.CASCADE
     )
 
+    referral_code = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+
     # =========================
     # ENROLLED DATE
     # =========================
@@ -267,7 +273,7 @@ class UserProfile(models.Model):
         User,
         on_delete=models.CASCADE
     )
-
+    
     xp = models.IntegerField(
         default=0
     )
@@ -427,3 +433,32 @@ class PostLike(models.Model):
     def __str__(self):
 
         return f"{self.user.username} liked"
+
+class Referral(models.Model):
+
+    referrer = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='referrals_made'
+    )
+
+    referred_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='referred_by'
+    )
+
+    enrollment = models.ForeignKey(
+        Enrollment,
+        on_delete=models.CASCADE
+    )
+
+    commission = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )

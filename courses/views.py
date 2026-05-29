@@ -51,6 +51,7 @@ def course_list(request):
 
 # =========================
 # ENROLL COURSE
+# ✅ Just redirect to payment — never create enrollment here
 # =========================
 
 @login_required(login_url='login')
@@ -61,21 +62,22 @@ def enroll_course(request, course_id):
         id=course_id
     )
 
-    already_enrolled = Enrollment.objects.filter(
+    # ✅ If already paid, go straight to lessons
+    already_paid = Enrollment.objects.filter(
         user=request.user,
-        course=course
+        course=course,
+        is_paid=True
     ).exists()
 
-    if not already_enrolled:
-
-        Enrollment.objects.create(
-            user=request.user,
-            course=course
+    if already_paid:
+        return redirect(
+            'course_lessons',
+            course_id=course.id
         )
 
+    # ✅ Not paid — redirect to payment page only
     return redirect(
-        'course_lessons',
-        course_id=course.id
+        f'/payment/?course_id={course.id}'
     )
 
 
@@ -101,7 +103,9 @@ def course_lessons(request, course_id):
     if not enrollment:
         return redirect('courses')
 
-    duplicate_enrollments = enrollments.exclude(id=enrollment.id)
+    duplicate_enrollments = enrollments.exclude(
+        id=enrollment.id
+    )
 
     if duplicate_enrollments.exists():
         duplicate_enrollments.delete()
@@ -417,9 +421,13 @@ def community(request):
                 content=content
             )
 
-    posts = CommunityPost.objects.all().order_by('-created_at')
+    posts = CommunityPost.objects.all().order_by(
+        '-created_at'
+    )
 
-    top_users = UserProfile.objects.all().order_by('-xp')[:5]
+    top_users = UserProfile.objects.all().order_by(
+        '-xp'
+    )[:5]
 
     liked_posts = PostLike.objects.filter(
         user=request.user
@@ -563,7 +571,8 @@ def profile_page(request):
     ).order_by('-created_at')
 
     certificates = Enrollment.objects.filter(
-        user=request.user
+        user=request.user,
+        is_paid=True        # ✅ Only show real paid enrollments
     )
 
     total_users = UserProfile.objects.count()
@@ -590,8 +599,8 @@ def profile_page(request):
 
 # =========================
 # PAYMENT PAGE
+# ✅ Creates temporary enrollment with order_id only
 # =========================
-
 @login_required(login_url='login')
 def payment_page(request):
 
@@ -614,11 +623,6 @@ def payment_page(request):
             course_id=course.id
         )
 
-    enrollment, created = Enrollment.objects.get_or_create(
-        user=request.user,
-        course=course
-    )
-
     client = razorpay.Client(
         auth=(
             settings.RAZORPAY_KEY_ID,
@@ -634,8 +638,8 @@ def payment_page(request):
         "payment_capture": "1"
     })
 
-    enrollment.order_id = payment['id']
-    enrollment.save()
+    # Store temporarily in session
+    request.session['course_id'] = course.id
 
     context = {
         "course": course,
@@ -648,28 +652,33 @@ def payment_page(request):
         'payment.html',
         context
     )
-
-
-# =========================
-# PAYMENT SUCCESS
-# =========================
-
 @csrf_exempt
+@login_required(login_url='login')
 def payment_success(request):
 
-    payment_id = request.POST.get('razorpay_payment_id')
-    order_id   = request.POST.get('razorpay_order_id')
-    signature  = request.POST.get('razorpay_signature')
+    payment_id = request.POST.get(
+        'razorpay_payment_id'
+    )
 
-    enrollment = Enrollment.objects.filter(
-        order_id=order_id
-    ).first()
+    order_id = request.POST.get(
+        'razorpay_order_id'
+    )
 
-    if not enrollment:
+    signature = request.POST.get(
+        'razorpay_signature'
+    )
+
+    course_id = request.session.get(
+        'course_id'
+    )
+
+    if not course_id:
         return redirect('courses')
 
-    user   = enrollment.user
-    course = enrollment.course
+    course = get_object_or_404(
+        Course,
+        id=course_id
+    )
 
     client = razorpay.Client(
         auth=(
@@ -679,28 +688,40 @@ def payment_success(request):
     )
 
     try:
+
         client.utility.verify_payment_signature({
-            'razorpay_order_id':   order_id,
+            'razorpay_order_id': order_id,
             'razorpay_payment_id': payment_id,
-            'razorpay_signature':  signature
+            'razorpay_signature': signature
         })
 
     except:
-        return redirect('payment_page')
 
-    enrollment.is_paid    = True
-    enrollment.payment_id = payment_id
-    enrollment.save()
+        return redirect(
+            f'/payment/?course_id={course.id}'
+        )
 
-    user.backend = 'django.contrib.auth.backends.ModelBackend'
-    login(request, user)
+    enrollment, created = Enrollment.objects.get_or_create(
+        user=request.user,
+        course=course,
+        defaults={
+            'is_paid': True,
+            'payment_id': payment_id,
+            'order_id': order_id
+        }
+    )
+
+    if not created:
+        enrollment.is_paid = True
+        enrollment.payment_id = payment_id
+        enrollment.order_id = order_id
+        enrollment.save()
 
     return redirect(
         'course_lessons',
         course_id=course.id
     )
-
-
+    
 # =========================
 # STATIC PAGES
 # =========================

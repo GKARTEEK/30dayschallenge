@@ -177,7 +177,6 @@ class Lesson(models.Model):
 
         return f"{self.course.title} - Day {self.day}"
 
-
 # =========================
 # MCQ Quiz Model
 # =========================
@@ -192,28 +191,42 @@ class QuizQuestion(models.Model):
 
     question = models.TextField()
 
-    option1 = models.CharField(
-        max_length=200
-    )
-
-    option2 = models.CharField(
-        max_length=200
-    )
-
-    option3 = models.CharField(
-        max_length=200
-    )
-
-    option4 = models.CharField(
-        max_length=200
-    )
+    option1 = models.CharField(max_length=200)
+    option2 = models.CharField(max_length=200)
+    option3 = models.CharField(max_length=200)
+    option4 = models.CharField(max_length=200)
 
     correct_answer = models.CharField(
-        max_length=200
+        max_length=10,
+        choices=[
+            ('option1', 'Option 1'),
+            ('option2', 'Option 2'),
+            ('option3', 'Option 3'),
+            ('option4', 'Option 4'),
+        ]
     )
 
-    def __str__(self):
+    class Meta:
+        ordering = ['id']  # ✅ Consistent question order
 
+    def get_options(self):  # ✅ Helper for template
+        return [
+            ('option1', self.option1),
+            ('option2', self.option2),
+            ('option3', self.option3),
+            ('option4', self.option4),
+        ]
+
+    def get_correct_answer_text(self):  # ✅ Helper to show correct answer
+        mapping = {
+            'option1': self.option1,
+            'option2': self.option2,
+            'option3': self.option3,
+            'option4': self.option4,
+        }
+        return mapping.get(self.correct_answer, '')
+
+    def __str__(self):
         return self.question
 
 
@@ -233,23 +246,17 @@ class QuizAttempt(models.Model):
         on_delete=models.CASCADE
     )
 
-    score = models.IntegerField(
-        default=0
-    )
+    score = models.IntegerField(default=0)
 
-    total_questions = models.IntegerField(
-        default=0
-    )
+    total_questions = models.IntegerField(default=0)
 
-    attempted_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    attempted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['user', 'lesson']  # ✅ No duplicate attempts
 
     def __str__(self):
-
         return f"{self.user.username} - {self.lesson.title}"
-
-
 # =========================
 # User Profile Model
 # =========================

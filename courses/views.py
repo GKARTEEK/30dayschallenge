@@ -82,9 +82,6 @@ def enroll_course(request, course_id):
 # =========================
 # COURSE LESSONS
 # =========================
-# =========================
-# COURSE LESSONS
-# =========================
 
 @login_required(login_url='login')
 def course_lessons(request, course_id):
@@ -94,10 +91,6 @@ def course_lessons(request, course_id):
         id=course_id
     )
 
-    # =========================
-    # HANDLE DUPLICATE ENROLLMENTS
-    # =========================
-
     enrollments = Enrollment.objects.filter(
         user=request.user,
         course=course
@@ -105,45 +98,20 @@ def course_lessons(request, course_id):
 
     enrollment = enrollments.first()
 
-    # =========================
-    # NO ENROLLMENT
-    # =========================
-
     if not enrollment:
+        return redirect('courses')
 
-        return redirect(
-            'courses'
-        )
-
-    # =========================
-    # DELETE DUPLICATES
-    # =========================
-
-    duplicate_enrollments = enrollments.exclude(
-        id=enrollment.id
-    )
+    duplicate_enrollments = enrollments.exclude(id=enrollment.id)
 
     if duplicate_enrollments.exists():
-
         duplicate_enrollments.delete()
-
-    # =========================
-    # PAYMENT CHECK
-    # =========================
 
     if (
         not enrollment.is_paid
         and
         not enrollment.is_free_access
     ):
-
-        return redirect(
-            'payment_page'
-        )
-
-    # =========================
-    # UNLOCK SYSTEM
-    # =========================
+        return redirect('payment_page')
 
     days_passed = (
         date.today() - enrollment.enrolled_at
@@ -153,17 +121,11 @@ def course_lessons(request, course_id):
         course=course
     ).order_by('day')
 
-    # =========================
-    # PROGRESS
-    # =========================
-
     progress = int(
-        (days_passed / course.total_days)
-        * 100
+        (days_passed / course.total_days) * 100
     )
 
     if progress > 100:
-
         progress = 100
 
     context = {
@@ -178,6 +140,7 @@ def course_lessons(request, course_id):
         'course_lessons.html',
         context
     )
+
 
 # =========================
 # LESSON DETAIL
@@ -202,7 +165,6 @@ def lesson_detail(request, lesson_id):
     # =========================
 
     if not enrollment.is_paid and not enrollment.is_free_access:
-
         return redirect(
             'payment_page',
             course_id=lesson.course.id
@@ -217,7 +179,6 @@ def lesson_detail(request, lesson_id):
     ).days + 1
 
     if lesson.day > days_passed:
-
         return redirect(
             'course_lessons',
             course_id=lesson.course.id
@@ -244,8 +205,7 @@ def lesson_detail(request, lesson_id):
     # =========================
 
     progress = int(
-        (lesson.day / lesson.course.total_days)
-        * 100
+        (lesson.day / lesson.course.total_days) * 100
     )
 
     # =========================
@@ -267,6 +227,7 @@ def lesson_detail(request, lesson_id):
     ).first()
 
     score = None
+    total_questions = quiz_questions.count()
 
     # =========================
     # QUIZ SUBMISSION
@@ -275,14 +236,11 @@ def lesson_detail(request, lesson_id):
     if request.method == "POST":
 
         if existing_attempt:
-
             score = existing_attempt.score
+            total_questions = existing_attempt.total_questions
 
         else:
-
             correct_answers = 0
-
-            total_questions = quiz_questions.count()
 
             for quiz in quiz_questions:
 
@@ -291,7 +249,6 @@ def lesson_detail(request, lesson_id):
                 )
 
                 if selected_answer == quiz.correct_answer:
-
                     correct_answers += 1
 
             score = correct_answers
@@ -303,14 +260,19 @@ def lesson_detail(request, lesson_id):
                 total_questions=total_questions
             )
 
-            profile = UserProfile.objects.get(
-                user=request.user
-            )
+            if score > 0:
 
-            profile.xp += score * 10
-            profile.coins += score * 2
-            profile.level = (profile.xp // 500) + 1
-            profile.save()
+                profile = UserProfile.objects.get(
+                    user=request.user
+                )
+
+                profile.xp += score * 10
+                profile.coins += score * 2
+                profile.level = max(
+                    profile.level,
+                    (profile.xp // 500) + 1
+                )
+                profile.save()
 
     context = {
         'lesson': lesson,
@@ -319,6 +281,7 @@ def lesson_detail(request, lesson_id):
         'progress': progress,
         'days_passed': days_passed,
         'score': score,
+        'total_questions': total_questions,
         'existing_attempt': existing_attempt,
         'completed': completed
     }
@@ -369,7 +332,6 @@ def complete_lesson(request, lesson_id):
         # =========================
 
         if profile.completed_lessons == 1:
-
             Badge.objects.get_or_create(
                 user=request.user,
                 title='First Step',
@@ -380,7 +342,6 @@ def complete_lesson(request, lesson_id):
             )
 
         if profile.completed_lessons == 5:
-
             Badge.objects.get_or_create(
                 user=request.user,
                 title='Fast Learner',
@@ -391,7 +352,6 @@ def complete_lesson(request, lesson_id):
             )
 
         if profile.completed_lessons == 10:
-
             Badge.objects.get_or_create(
                 user=request.user,
                 title='Consistency King',
@@ -402,7 +362,6 @@ def complete_lesson(request, lesson_id):
             )
 
         if profile.xp >= 1000:
-
             Badge.objects.get_or_create(
                 user=request.user,
                 title='1000 XP Club',
@@ -453,26 +412,18 @@ def community(request):
         content = request.POST.get('content')
 
         if content:
-
             CommunityPost.objects.create(
                 user=request.user,
                 content=content
             )
 
-    posts = CommunityPost.objects.all().order_by(
-        '-created_at'
-    )
+    posts = CommunityPost.objects.all().order_by('-created_at')
 
-    top_users = UserProfile.objects.all().order_by(
-        '-xp'
-    )[:5]
+    top_users = UserProfile.objects.all().order_by('-xp')[:5]
 
     liked_posts = PostLike.objects.filter(
         user=request.user
-    ).values_list(
-        'post_id',
-        flat=True
-    )
+    ).values_list('post_id', flat=True)
 
     context = {
         'posts': posts,
@@ -544,7 +495,6 @@ def add_comment(request, post_id):
         content = request.POST.get('content')
 
         if content:
-
             PostComment.objects.create(
                 post=post,
                 user=request.user,
@@ -576,7 +526,6 @@ def generate_certificate(request, course_id):
     ).count()
 
     if completed_lessons < total_lessons:
-
         return redirect(
             'course_lessons',
             course_id=course.id
@@ -638,28 +587,20 @@ def profile_page(request):
         context
     )
 
+
 # =========================
 # PAYMENT PAGE
 # =========================
+
 @login_required(login_url='login')
 def payment_page(request):
 
-    # =========================
-    # GET COURSE ID
-    # =========================
-
-    course_id = request.GET.get(
-        'course_id'
-    )
+    course_id = request.GET.get('course_id')
 
     course = get_object_or_404(
         Course,
         id=course_id
     )
-
-    # =========================
-    # ALREADY PAID CHECK
-    # =========================
 
     already_enrolled = Enrollment.objects.filter(
         user=request.user,
@@ -668,24 +609,15 @@ def payment_page(request):
     ).exists()
 
     if already_enrolled:
-
         return redirect(
             'course_lessons',
             course_id=course.id
         )
 
-    # =========================
-    # CREATE ENROLLMENT
-    # =========================
-
     enrollment, created = Enrollment.objects.get_or_create(
         user=request.user,
         course=course
     )
-
-    # =========================
-    # RAZORPAY CLIENT
-    # =========================
 
     client = razorpay.Client(
         auth=(
@@ -694,23 +626,13 @@ def payment_page(request):
         )
     )
 
-    # ₹1 TESTING
-
     amount = 14900
-
-    # =========================
-    # CREATE ORDER
-    # =========================
 
     payment = client.order.create({
         "amount": amount,
         "currency": "INR",
         "payment_capture": "1"
     })
-
-    # =========================
-    # SAVE ORDER ID
-    # =========================
 
     enrollment.order_id = payment['id']
     enrollment.save()
@@ -726,43 +648,28 @@ def payment_page(request):
         'payment.html',
         context
     )
+
+
+# =========================
+# PAYMENT SUCCESS
+# =========================
+
 @csrf_exempt
 def payment_success(request):
 
-    # =========================
-    # PAYMENT DETAILS
-    # =========================
-
-    payment_id = request.POST.get(
-        'razorpay_payment_id'
-    )
-
-    order_id = request.POST.get(
-        'razorpay_order_id'
-    )
-
-    signature = request.POST.get(
-        'razorpay_signature'
-    )
-
-    # =========================
-    # GET ENROLLMENT
-    # =========================
+    payment_id = request.POST.get('razorpay_payment_id')
+    order_id   = request.POST.get('razorpay_order_id')
+    signature  = request.POST.get('razorpay_signature')
 
     enrollment = Enrollment.objects.filter(
         order_id=order_id
     ).first()
 
     if not enrollment:
-
         return redirect('courses')
 
-    user = enrollment.user
+    user   = enrollment.user
     course = enrollment.course
-
-    # =========================
-    # VERIFY PAYMENT
-    # =========================
 
     client = razorpay.Client(
         auth=(
@@ -772,72 +679,43 @@ def payment_success(request):
     )
 
     try:
-
         client.utility.verify_payment_signature({
-            'razorpay_order_id': order_id,
+            'razorpay_order_id':   order_id,
             'razorpay_payment_id': payment_id,
-            'razorpay_signature': signature
+            'razorpay_signature':  signature
         })
 
     except:
+        return redirect('payment_page')
 
-        return redirect(
-            'payment_page'
-        )
-
-    # =========================
-    # SAVE PAYMENT
-    # =========================
-
-    enrollment.is_paid = True
+    enrollment.is_paid    = True
     enrollment.payment_id = payment_id
     enrollment.save()
 
-    # =========================
-    # LOGIN USER
-    # =========================
-
-    user.backend = (
-        'django.contrib.auth.backends.ModelBackend'
-    )
-
+    user.backend = 'django.contrib.auth.backends.ModelBackend'
     login(request, user)
-
-    # =========================
-    # SUCCESS REDIRECT
-    # =========================
 
     return redirect(
         'course_lessons',
         course_id=course.id
     )
-def about_page(request):
 
-    return render(
-        request,
-        'about.html'
-    )
+
+# =========================
+# STATIC PAGES
+# =========================
+
+def about_page(request):
+    return render(request, 'about.html')
 
 
 def contact_page(request):
-
-    return render(
-        request,
-        'contact.html'
-    )
+    return render(request, 'contact.html')
 
 
 def privacy_page(request):
-
-    return render(
-        request,
-        'privacy.html'
-    )
+    return render(request, 'privacy.html')
 
 
 def terms_page(request):
-
-    return render(
-        request,
-        'terms.html'
-    )
+    return render(request, 'terms.html')

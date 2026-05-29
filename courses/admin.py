@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Enrollment
-    
+
 from .models import (
     Course,
     Enrollment,
     Lesson,
-    QuizQuestion
+    QuizQuestion,
+    QuizAttempt,        # ✅ Added
+    CommunityPost
 )
 
 
@@ -13,30 +14,62 @@ from .models import (
 # Course Admin
 # =========================
 
-admin.site.register(Course)
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display  = ['title', 'created_at']
+    search_fields = ['title']
 
 
 # =========================
 # Enrollment Admin
 # =========================
 
-admin.site.register(Enrollment)
+@admin.register(Enrollment)
+class EnrollmentAdmin(admin.ModelAdmin):
+    list_display  = ['user', 'course', 'enrolled_at']
+    list_filter   = ['course']
+    search_fields = ['user__username']
 
 
 # =========================
 # Lesson Admin
 # =========================
 
-admin.site.register(Lesson)
+@admin.register(Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    list_display  = ['title', 'course', 'day']
+    list_filter   = ['course']
+    search_fields = ['title']
 
 
 # =========================
-# Quiz Admin
+# Quiz Question Admin
 # =========================
 
-admin.site.register(QuizQuestion)
-from .models import CommunityPost
+@admin.register(QuizQuestion)
+class QuizQuestionAdmin(admin.ModelAdmin):
+    list_display  = ['question', 'lesson', 'correct_answer']
+    list_filter   = ['lesson']
+    search_fields = ['question']
 
-admin.site.register(
-    CommunityPost
-)
+
+# =========================
+# Quiz Attempt Admin
+# =========================
+
+@admin.register(QuizAttempt)
+class QuizAttemptAdmin(admin.ModelAdmin):
+    list_display  = ['user', 'lesson', 'score', 'total_questions', 'attempted_at']
+    list_filter   = ['lesson']
+    search_fields = ['user__username']
+
+
+# =========================
+# Community Post Admin
+# =========================
+
+@admin.register(CommunityPost)
+class CommunityPostAdmin(admin.ModelAdmin):
+    list_display  = ['user', 'created_at']
+    search_fields = ['user__username']
+

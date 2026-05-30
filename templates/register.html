@@ -48,12 +48,12 @@
         z-index: 2;
     }
 
-    .logo {
+    .auth-logo {
         text-align: center;
         margin-bottom: 30px;
     }
 
-    .logo h1 {
+    .auth-logo h1 {
         font-size: 42px;
         font-weight: 800;
         background: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
@@ -197,14 +197,60 @@
     .login-link a:hover {
         color: #86efac;
     }
+    /* =========================
+   MOBILE REGISTER
+========================= */
 
+@media(max-width:768px){
+
+    .register-container{
+        padding:20px 10px;
+    }
+
+    .register-card{
+        max-width:100%;
+        padding:25px 20px;
+        border-radius:20px;
+    }
+
+    .auth-logo h1{
+        font-size:28px;
+    }
+
+    .xp-badge{
+        font-size:12px;
+        padding:8px 14px;
+    }
+
+    .title{
+        font-size:26px;
+    }
+
+    .subtitle{
+        font-size:14px;
+    }
+
+    .form-group input{
+        padding:12px;
+        font-size:14px;
+    }
+
+    .register-btn{
+        padding:14px;
+        font-size:16px;
+    }
+
+    .terms{
+        font-size:12px;
+    }
+}
 </style>
 
 <div class="register-container">
 
     <div class="register-card">
 
-        <div class="logo">
+        <div class="auth-logo">
             <h1>⚡ 30DaysChallenge</h1>
         </div>
 

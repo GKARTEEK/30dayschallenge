@@ -1,772 +1,797 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
+    <head>
 
-    <meta charset="UTF-8">
+        <meta charset="UTF-8">
 
-    <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-    >
+        <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+        >
 
-    <title>
-        30DaysChallenge
-    </title>
+        <title>
+            30DaysChallenge
+        </title>
 
-    <!-- GOOGLE FONT -->
+        <!-- GOOGLE FONT -->
 
-    <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-    >
+        <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+        >
 
-    <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-    >
+        <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+        >
 
-    <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet"
-    >
+        <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+        >
 
-    <style>
+        <style>
 
-/* =========================
-   FOOTER
-========================= */
+    /* =========================
+    FOOTER
+    ========================= */
 
-.footer{
+    .footer{
 
-    background:#111827;
+        background:#111827;
 
-    margin-top:80px;
+        margin-top:80px;
 
-    border-top:1px solid #1e293b;
-}
-
-.footer-container{
-
-    max-width:1400px;
-
-    margin:auto;
-
-    padding:60px 40px;
-
-    display:grid;
-
-    grid-template-columns:
-    2fr
-    1fr
-    1fr
-    1fr;
-
-    gap:40px;
-}
-
-.footer-brand h1{
-
-    font-size:36px;
-
-    margin-bottom:20px;
-}
-
-.footer-brand span{
-
-    color:#22c55e;
-}
-
-.footer-brand p{
-
-    color:#94a3b8;
-
-    line-height:1.8;
-
-    max-width:400px;
-}
-
-.footer-links{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:14px;
-}
-
-.footer-links h2{
-
-    margin-bottom:10px;
-
-    font-size:22px;
-}
-
-.footer-links a{
-
-    text-decoration:none;
-
-    color:#cbd5e1;
-
-    transition:0.3s;
-}
-
-.footer-links a:hover{
-
-    color:#22c55e;
-}
-
-.footer-bottom{
-
-    border-top:1px solid #1e293b;
-
-    padding:20px;
-
-    text-align:center;
-
-    color:#64748b;
-}
-
-/* MOBILE */
-
-@media(max-width:1000px){
+        border-top:1px solid #1e293b;
+    }
 
     .footer-container{
 
-        grid-template-columns:1fr;
+        max-width:1400px;
 
-        padding:40px 20px;
+        margin:auto;
+
+        padding:60px 40px;
+
+        display:grid;
+
+        grid-template-columns:
+        2fr
+        1fr
+        1fr
+        1fr;
+
+        gap:40px;
     }
-}
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Inter',sans-serif;
+    .footer-brand h1{
+
+        font-size:36px;
+
+        margin-bottom:20px;
+    }
+
+    .footer-brand span{
+
+        color:#22c55e;
+    }
+
+    .footer-brand p{
+
+        color:#94a3b8;
+
+        line-height:1.8;
+
+        max-width:400px;
+    }
+
+    .footer-links{
+
+        display:flex;
+
+        flex-direction:column;
+
+        gap:14px;
+    }
+
+    .footer-links h2{
+
+        margin-bottom:10px;
+
+        font-size:22px;
+    }
+
+    .footer-links a{
+
+        text-decoration:none;
+
+        color:#cbd5e1;
+
+        transition:0.3s;
+    }
+
+    .footer-links a:hover{
+
+        color:#22c55e;
+    }
+
+    .footer-bottom{
+
+        border-top:1px solid #1e293b;
+
+        padding:20px;
+
+        text-align:center;
+
+        color:#64748b;
+    }
+
+    /* MOBILE */
+
+    @media(max-width:1000px){
+
+        .footer-container{
+
+            grid-template-columns:1fr;
+
+            padding:40px 20px;
         }
-
-        body{
-            background:#0f172a;
-            color:white;
-        }
-
-        /* =========================
-           NAVBAR
-        ========================= */
-
-        nav{
-
-            width:100%;
-
-            height:90px;
-
-            background:#111827;
-
-            display:flex;
-
-            justify-content:space-between;
-
-            align-items:center;
-
-            padding:0 60px;
-
-            border-bottom:1px solid #1e293b;
-
-            position:sticky;
-
-            top:0;
-
-            z-index:1000;
-        }
-
-        /* =========================
-           LOGO
-        ========================= */
-
-        .logo{
-
-            display:flex;
-
-            align-items:center;
-
-            gap:15px;
-        }
-
-        .circle{
-
-            width:52px;
-            height:52px;
-
-            background:#22c55e;
-
-            border-radius:50%;
-
-            display:flex;
-
-            justify-content:center;
-
-            align-items:center;
-
-            color:white;
-
-            font-size:22px;
-
-            font-weight:800;
-
-            box-shadow:
-            0 0 25px rgba(34,197,94,0.4);
-        }
-
-        .logo h1{
-
-            font-size:28px;
-
-            font-weight:800;
-
-            color:white;
-        }
-
-        .logo span{
-            color:#22c55e;
-        }
-
-        /* =========================
-           MENU
-        ========================= */
-
-        .menu{
-
-            display:flex;
-
-            align-items:center;
-
-            gap:35px;
-        }
-
-        .menu a{
-
-            text-decoration:none;
-
-            color:#cbd5e1;
-
-            font-weight:500;
-
-            transition:0.3s;
-
-            position:relative;
-        }
-
-        .menu a:hover{
-            color:#22c55e;
-        }
-
-        .menu a::after{
-
-            content:'';
-
-            position:absolute;
-
-            left:0;
-            bottom:-6px;
-
-            width:0%;
-
-            height:2px;
-
-            background:#22c55e;
-
-            transition:0.3s;
-        }
-
-        .menu a:hover::after{
-            width:100%;
-        }
-
-        /* =========================
-           RIGHT NAV
-        ========================= */
-
-        .nav-right{
-
-            display:flex;
-
-            align-items:center;
-
-            gap:20px;
-        }
-
-        /* =========================
-           XP BOX
-        ========================= */
-
-        .xp-box{
-
-            background:#1e293b;
-
-            padding:10px 18px;
-
-            border-radius:14px;
-
-            display:flex;
-
-            align-items:center;
-
-            gap:12px;
-        }
-
-        .xp-item{
-
-            color:#facc15;
-
-            font-size:14px;
-
-            font-weight:700;
-        }
-
-        .level-badge{
-
-            background:#22c55e;
-
-            color:white;
-
-            padding:6px 12px;
-
-            border-radius:999px;
-
-            font-size:13px;
-
-            font-weight:700;
-        }
-
-        /* =========================
-           PROFILE BUTTON
-        ========================= */
-
-        .profile-btn{
-
-            text-decoration:none;
-
-            display:flex;
-
-            align-items:center;
-
-            gap:10px;
-
-            background:#22c55e20;
-
-            color:#22c55e;
-
-            padding:10px 18px;
-
-            border-radius:14px;
-
-            font-weight:700;
-
-            transition:0.3s;
-        }
-
-        .profile-btn:hover{
-
-            background:#22c55e;
-
-            color:white;
-
-            transform:translateY(-2px);
-        }
-
-        /* =========================
-           BUTTONS
-        ========================= */
-
-        .login-btn{
-
-            color:white;
-
-            text-decoration:none;
-
-            font-weight:600;
-
-            transition:0.3s;
-        }
-
-        .login-btn:hover{
-            color:#22c55e;
-        }
-
-        .start-btn{
-
-            background:#22c55e;
-
-            color:white;
-
-            text-decoration:none;
-
-            padding:12px 24px;
-
-            border-radius:14px;
-
-            font-weight:700;
-
-            transition:0.3s;
-        }
-
-        .start-btn:hover{
-
-            background:#16a34a;
-
-            transform:translateY(-2px);
-        }
-
-        .logout-btn{
-
-            background:#ef4444;
-
-            color:white;
-
-            text-decoration:none;
-
-            padding:12px 24px;
-
-            border-radius:14px;
-
-            font-weight:700;
-
-            transition:0.3s;
-        }
-
-        .logout-btn:hover{
-
-            background:#dc2626;
-
-            transform:translateY(-2px);
-        }
-
-        /* =========================
-           CONTAINER
-        ========================= */
-
-        .container{
-            padding:40px;
-        }
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media(max-width:1000px){
+    }
+
+            *{
+                margin:0;
+                padding:0;
+                box-sizing:border-box;
+                font-family:'Inter',sans-serif;
+            }
+
+            body{
+                background:#0f172a;
+                color:white;
+            }
+
+            /* =========================
+            NAVBAR
+            ========================= */
 
             nav{
-                padding:0 20px;
+
+                width:100%;
+
+                height:90px;
+
+                background:#111827;
+
+                display:flex;
+
+                justify-content:space-between;
+
+                align-items:center;
+
+                padding:0 60px;
+
+                border-bottom:1px solid #1e293b;
+
+                position:sticky;
+
+                top:0;
+
+                z-index:1000;
             }
 
-            .menu{
-                display:none;
+            /* =========================
+            LOGO
+            ========================= */
+
+            .logo{
+
+                display:flex;
+
+                align-items:center;
+
+                gap:15px;
             }
 
-            .xp-box{
-                display:none;
+            .circle{
+
+                width:52px;
+                height:52px;
+
+                background:#22c55e;
+
+                border-radius:50%;
+
+                display:flex;
+
+                justify-content:center;
+
+                align-items:center;
+
+                color:white;
+
+                font-size:22px;
+
+                font-weight:800;
+
+                box-shadow:
+                0 0 25px rgba(34,197,94,0.4);
             }
 
             .logo h1{
-                font-size:22px;
+
+                font-size:28px;
+
+                font-weight:800;
+
+                color:white;
             }
+
+            .logo span{
+                color:#22c55e;
+            }
+
+            /* =========================
+            MENU
+            ========================= */
+
+            .menu{
+
+                display:flex;
+
+                align-items:center;
+
+                gap:35px;
+            }
+
+            .menu a{
+
+                text-decoration:none;
+
+                color:#cbd5e1;
+
+                font-weight:500;
+
+                transition:0.3s;
+
+                position:relative;
+            }
+
+            .menu a:hover{
+                color:#22c55e;
+            }
+
+            .menu a::after{
+
+                content:'';
+
+                position:absolute;
+
+                left:0;
+                bottom:-6px;
+
+                width:0%;
+
+                height:2px;
+
+                background:#22c55e;
+
+                transition:0.3s;
+            }
+
+            .menu a:hover::after{
+                width:100%;
+            }
+
+            /* =========================
+            RIGHT NAV
+            ========================= */
+
+            .nav-right{
+
+                display:flex;
+
+                align-items:center;
+
+                gap:20px;
+            }
+
+            /* =========================
+            XP BOX
+            ========================= */
+
+            .xp-box{
+
+                background:#1e293b;
+
+                padding:10px 18px;
+
+                border-radius:14px;
+
+                display:flex;
+
+                align-items:center;
+
+                gap:12px;
+            }
+
+            .xp-item{
+
+                color:#facc15;
+
+                font-size:14px;
+
+                font-weight:700;
+            }
+
+            .level-badge{
+
+                background:#22c55e;
+
+                color:white;
+
+                padding:6px 12px;
+
+                border-radius:999px;
+
+                font-size:13px;
+
+                font-weight:700;
+            }
+
+            /* =========================
+            PROFILE BUTTON
+            ========================= */
+
+            .profile-btn{
+
+                text-decoration:none;
+
+                display:flex;
+
+                align-items:center;
+
+                gap:10px;
+
+                background:#22c55e20;
+
+                color:#22c55e;
+
+                padding:10px 18px;
+
+                border-radius:14px;
+
+                font-weight:700;
+
+                transition:0.3s;
+            }
+
+            .profile-btn:hover{
+
+                background:#22c55e;
+
+                color:white;
+
+                transform:translateY(-2px);
+            }
+
+            /* =========================
+            BUTTONS
+            ========================= */
+
+            .login-btn{
+
+                color:white;
+
+                text-decoration:none;
+
+                font-weight:600;
+
+                transition:0.3s;
+            }
+
+            .login-btn:hover{
+                color:#22c55e;
+            }
+
+            .start-btn{
+
+                background:#22c55e;
+
+                color:white;
+
+                text-decoration:none;
+
+                padding:12px 24px;
+
+                border-radius:14px;
+
+                font-weight:700;
+
+                transition:0.3s;
+            }
+
+            .start-btn:hover{
+
+                background:#16a34a;
+
+                transform:translateY(-2px);
+            }
+
+            .logout-btn{
+
+                background:#ef4444;
+
+                color:white;
+
+                text-decoration:none;
+
+                padding:12px 24px;
+
+                border-radius:14px;
+
+                font-weight:700;
+
+                transition:0.3s;
+            }
+
+            .logout-btn:hover{
+
+                background:#dc2626;
+
+                transform:translateY(-2px);
+            }
+
+            /* =========================
+            CONTAINER
+            ========================= */
 
             .container{
-                padding:20px;
+                padding:40px;
             }
-        }
 
-    </style>
+            /* =========================
+            MOBILE
+            ========================= */
 
-</head>
+            @media(max-width:768px){
 
-<body>
+    nav{
+        padding:10px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
 
-    <!-- =========================
-         NAVBAR
-    ========================= -->
+    .menu{
+        display:none;
+    }
 
-    <nav>
+    .xp-box{
+        display:none;
+    }
 
-        <!-- LOGO -->
+    .logo{
+        gap:8px;
+        flex-shrink:1;
+    }
 
-        <div class="logo">
+    .logo h1{
+        font-size:14px;
+        white-space:nowrap;
+    }
 
-            <div class="circle">
-                30
-            </div>
+    .circle{
+        width:36px;
+        height:36px;
+        font-size:16px;
+        flex-shrink:0;
+    }
 
-            <h1>
+    .nav-right{
+        gap:6px;
+    }
 
-                Days<span>Challenge</span>
+    .login-btn,
+    .start-btn{
+        padding:8px 10px;
+        font-size:13px;
+    }
 
-            </h1>
+    .container{
+        padding:10px;
+    }
+}   
+        </style>
 
-        </div>
+    </head>
 
-        <!-- MENU -->
+    <body>
 
-        <div class="menu">
+        <!-- =========================
+            NAVBAR
+        ========================= -->
 
-            <a href="/">
-                Home
-            </a>
+        <nav>
 
-            <a href="/courses/">
-                Courses
-            </a>
+            <!-- LOGO -->
 
-            <a href="/leaderboard/">
-                Leaderboard
-            </a>
+            <div class="logo">
 
-            <a href="/community/">
-                Community
-            </a>
-
-        </div>
-
-        <!-- RIGHT -->
-
-        <div class="nav-right">
-
-            {% if user.is_authenticated %}
-
-                <!-- XP -->
-
-                <div class="xp-box">
-
-                    <div class="xp-item">
-
-                        ⭐
-                        {{ request.user.userprofile.xp }}
-                        XP
-
-                    </div>
-
-                    <div class="xp-item">
-
-                        🪙
-                        {{ request.user.userprofile.coins }}
-
-                    </div>
-
-                    <div class="level-badge">
-
-                        Level
-                        {{ request.user.userprofile.level }}
-
-                    </div>
-
+                <div class="circle">
+                    30
                 </div>
 
-                <!-- PROFILE -->
+                <h1>
 
-                <a
-                href="/profile/"
-                class="profile-btn"
-                >
+                    30<span>Days</span>
 
-                    👤
+                </h1>
 
-                    Hi,
-                    {{ user.username }}
+            </div>
 
+            <!-- MENU -->
+
+            <div class="menu">
+
+                <a href="/">
+                    Home
                 </a>
 
-                <!-- LOGOUT -->
-
-                <a
-                href="/logout/"
-                class="logout-btn"
-                >
-
-                    Logout
-
+                <a href="/courses/">
+                    Courses
                 </a>
 
-            {% else %}
-
-                <!-- LOGIN -->
-
-                <a
-                href="/login/"
-                class="login-btn"
-                >
-
-                    Login
-
+                <a href="/leaderboard/">
+                    Leaderboard
                 </a>
 
-                <!-- SIGNUP -->
-
-                <a
-                href="/register/"
-                class="start-btn"
-                >
-
-                    Signup
-
+                <a href="/community/">
+                    Community
                 </a>
 
-            {% endif %}
+            </div>
+
+            <!-- RIGHT -->
+
+            <div class="nav-right">
+
+                {% if user.is_authenticated %}
+
+                    <!-- XP -->
+
+                    <div class="xp-box">
+
+                        <div class="xp-item">
+
+                            ⭐
+                            {{ request.user.userprofile.xp }}
+                            XP
+
+                        </div>
+
+                        <div class="xp-item">
+
+                            🪙
+                            {{ request.user.userprofile.coins }}
+
+                        </div>
+
+                        <div class="level-badge">
+
+                            Level
+                            {{ request.user.userprofile.level }}
+
+                        </div>
+
+                    </div>
+
+                    <!-- PROFILE -->
+
+                    <a
+                    href="/profile/"
+                    class="profile-btn"
+                    >
+
+                        👤
+
+                        Hi,
+                        {{ user.username }}
+
+                    </a>
+
+                    <!-- LOGOUT -->
+
+                    <a
+                    href="/logout/"
+                    class="logout-btn"
+                    >
+
+                        Logout
+
+                    </a>
+
+                {% else %}
+
+                    <!-- LOGIN -->
+
+                    <a
+                    href="/login/"
+                    class="login-btn"
+                    >
+
+                        Login
+
+                    </a>
+
+                    <!-- SIGNUP -->
+
+                    <a
+                    href="/register/"
+                    class="start-btn"
+                    >
+
+                        Signup
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </nav>
+
+        <!-- =========================
+            PAGE CONTENT
+        ========================= -->
+
+        <div class="container">
+
+            {% block content %}
+
+            {% endblock %}
 
         </div>
 
-    </nav>
 
-    <!-- =========================
-         PAGE CONTENT
+        <!-- =========================
+        FOOTER
     ========================= -->
 
-    <div class="container">
+    <footer class="footer">
 
-        {% block content %}
+        <div class="footer-container">
 
-        {% endblock %}
+            <!-- LEFT -->
 
-    </div>
+            <div class="footer-brand">
 
+                <h1>
 
-    <!-- =========================
-     FOOTER
-========================= -->
+                    30<span>DaysChallenge</span>
 
-<footer class="footer">
+                </h1>
 
-    <div class="footer-container">
+                <p>
 
-        <!-- LEFT -->
+                    Learn coding daily, build consistency,
+                    earn certificates, unlock badges,
+                    and grow together 🚀
 
-        <div class="footer-brand">
+                </p>
 
-            <h1>
+            </div>
 
-                30<span>DaysChallenge</span>
+            <!-- LINKS -->
 
-            </h1>
+            <div class="footer-links">
 
-            <p>
+                <h2>
+                    Quick Links
+                </h2>
 
-                Learn coding daily, build consistency,
-                earn certificates, unlock badges,
-                and grow together 🚀
+                <a href="/">
+                    Home
+                </a>
 
-            </p>
+                <a href="/courses/">
+                    Courses
+                </a>
 
-        </div>
+                <a href="/leaderboard/">
+                    Leaderboard
+                </a>
 
-        <!-- LINKS -->
+                <a href="/community/">
+                    Community
+                </a>
 
-        <div class="footer-links">
+            </div>
 
-            <h2>
-                Quick Links
-            </h2>
+            <!-- HELP -->
 
-            <a href="/">
-                Home
-            </a>
+            <div class="footer-links">
 
-            <a href="/courses/">
-                Courses
-            </a>
+                <h2>
+                    Help
+                </h2>
 
-            <a href="/leaderboard/">
-                Leaderboard
-            </a>
+                <a href="{% url 'about' %}">
+        About Us
+    </a>
 
-            <a href="/community/">
-                Community
-            </a>
+    <a href="{% url 'contact' %}">
+        Contact Us
+    </a>
 
-        </div>
+    <a href="{% url 'privacy' %}">
+        Privacy Policy
+    </a>
 
-        <!-- HELP -->
+    <a href="{% url 'terms' %}">
+        Terms & Conditions
+    </a>
+            </div>
 
-        <div class="footer-links">
+            <!-- SOCIAL -->
 
-            <h2>
-                Help
-            </h2>
+            <div class="footer-links">
 
-            <a href="{% url 'about' %}">
-    About Us
-</a>
+                <h2>
+                    Connect
+                </h2>
 
-<a href="{% url 'contact' %}">
-    Contact Us
-</a>
+                <a
+                href="https://instagram.com/"
+                target="_blank"
+                >
 
-<a href="{% url 'privacy' %}">
-    Privacy Policy
-</a>
+                    📸 Instagram
 
-<a href="{% url 'terms' %}">
-    Terms & Conditions
-</a>
-        </div>
+                </a>
 
-        <!-- SOCIAL -->
+                <a
+                href="https://t.me/"
+                target="_blank"
+                >
 
-        <div class="footer-links">
+                    💬 Telegram
 
-            <h2>
-                Connect
-            </h2>
+                </a>
 
-            <a
-            href="https://instagram.com/"
-            target="_blank"
-            >
+                <a
+                href="https://linkedin.com/"
+                target="_blank"
+                >
 
-                📸 Instagram
+                    💼 LinkedIn
 
-            </a>
+                </a>
 
-            <a
-            href="https://t.me/"
-            target="_blank"
-            >
+                <a
+                href="mailto:support@30dayschallenge.com"
+                >
 
-                💬 Telegram
+                    ✉ Email
 
-            </a>
+                </a>
 
-            <a
-            href="https://linkedin.com/"
-            target="_blank"
-            >
-
-                💼 LinkedIn
-
-            </a>
-
-            <a
-            href="mailto:support@30dayschallenge.com"
-            >
-
-                ✉ Email
-
-            </a>
+            </div>
 
         </div>
 
-    </div>
+        <!-- BOTTOM -->
 
-    <!-- BOTTOM -->
+        <div class="footer-bottom">
 
-    <div class="footer-bottom">
+            © 2026 30DaysChallenge.
+            All Rights Reserved         
 
-        © 2026 30DaysChallenge.
-        All Rights Reserved         
+        </div>
 
-    </div>
+    </footer>
 
-</footer>
+    </body>
 
-</body>
-
-</html>
+    </html>

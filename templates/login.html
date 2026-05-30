@@ -48,12 +48,12 @@
         z-index: 2;
     }
 
-    .logo {
+    .auth-logo {
         text-align: center;
         margin-bottom: 30px;
     }
 
-    .logo h1 {
+    .auth-logo h1 {
         font-size: 42px;
         font-weight: 800;
         background: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
@@ -192,14 +192,60 @@
     .register-link a:hover {
         color: #86efac;
     }
+    /* =========================
+   MOBILE LOGIN
+========================= */
 
+@media(max-width:768px){
+
+    .login-container{
+        padding:20px 10px;
+    }
+
+    .login-card{
+        max-width:100%;
+        padding:25px 20px;
+        border-radius:20px;
+    }
+
+    .auth-logo h1{
+        font-size:28px;
+    }
+
+    .welcome-badge{
+        font-size:12px;
+        padding:8px 14px;
+    }
+
+    .title{
+        font-size:26px;
+    }
+
+    .subtitle{
+        font-size:14px;
+    }
+
+    .form-group input{
+        padding:12px;
+        font-size:14px;
+    }
+
+    .login-btn{
+        padding:14px;
+        font-size:16px;
+    }
+
+    .register-link{
+        font-size:14px;
+    }
+}
 </style>
 
 <div class="login-container">
 
     <div class="login-card">
 
-        <div class="logo">
+        <div class="auth-logo">
             <h1>⚡ 30DaysChallenge</h1>
         </div>
 

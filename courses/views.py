@@ -696,7 +696,6 @@ def payment_page(request):
 
 
 @csrf_exempt
-@login_required(login_url='login')
 def payment_success(request):
 
     if request.method != "POST":

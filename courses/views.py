@@ -731,7 +731,7 @@ def payment_success(request):
         })
 
     except Exception as e:
-    print("PAYMENT VERIFICATION FAILED:", e)
+        print("PAYMENT VERIFICATION FAILED:", e)
 
     return redirect(
         f"/payment/?course_id={course.id}"

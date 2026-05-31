@@ -671,16 +671,17 @@ def payment_page(request):
         )
     )
 
-    amount = 100
+    amount = 100  # ₹1 test
 
     payment = client.order.create({
         "amount": amount,
         "currency": "INR",
-        "payment_capture": "1"
+        "payment_capture": "1",
+        "notes": {
+            "course_id": str(course.id),
+            "user_id": str(request.user.id)
+        }
     })
-
-    # Store temporarily in session
-    request.session['course_id'] = course.id
 
     context = {
         "course": course,
@@ -694,12 +695,11 @@ def payment_page(request):
         context
     )
 
+
 @csrf_exempt
 def payment_success(request):
 
     print("========== PAYMENT SUCCESS ==========")
-    print("User:", request.user)
-    print("Authenticated:", request.user.is_authenticated)
 
     if request.method != "POST":
         return redirect("courses")
@@ -708,20 +708,8 @@ def payment_success(request):
     order_id = request.POST.get("razorpay_order_id")
     signature = request.POST.get("razorpay_signature")
 
-    course_id = request.session.get("course_id")
-
-    print("Session Course ID:", course_id)
     print("Payment ID:", payment_id)
     print("Order ID:", order_id)
-
-    if not course_id:
-        print("Course ID missing from session")
-        return redirect("courses")
-
-    course = get_object_or_404(
-        Course,
-        id=course_id
-    )
 
     client = razorpay.Client(
         auth=(
@@ -738,36 +726,49 @@ def payment_success(request):
             "razorpay_signature": signature
         })
 
-        print("Signature verification successful")
+        payment_data = client.payment.fetch(
+            payment_id
+        )
+
+        course_id = payment_data["notes"]["course_id"]
+        user_id = payment_data["notes"]["user_id"]
+
+        print("Course ID:", course_id)
+        print("User ID:", user_id)
+
+        user = User.objects.get(
+            id=user_id
+        )
+
+        course = Course.objects.get(
+            id=course_id
+        )
+
+        enrollment, created = Enrollment.objects.get_or_create(
+            user=user,
+            course=course
+        )
+
+        enrollment.is_paid = True
+        enrollment.payment_id = payment_id
+        enrollment.order_id = order_id
+        enrollment.save()
+
+        print("Enrollment Saved")
+        print("Paid:", enrollment.is_paid)
+
+        return redirect(
+            "course_lessons",
+            course_id=course.id
+        )
 
     except Exception as e:
 
-        print("PAYMENT VERIFICATION FAILED:", e)
+        print("PAYMENT ERROR:", str(e))
 
-        return redirect(
-            f"/checkout/?course_id={course.id}"
-        )
-
-    enrollment, created = Enrollment.objects.get_or_create(
-        user=request.user,
-        course=course
-    )
-
-    enrollment.is_paid = True
-    enrollment.payment_id = payment_id
-    enrollment.order_id = order_id
-    enrollment.save()
-
-    print("Enrollment Saved")
-    print("Paid:", enrollment.is_paid)
-
-    request.session.pop("course_id", None)
-
-    return redirect(
-        "course_lessons",
-        course_id=course.id
-    )
-# =========================
+        return redirect("courses")
+        
+        # =========================
 # STATIC PAGES
 # =========================
 

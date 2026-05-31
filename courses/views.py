@@ -671,7 +671,7 @@ def payment_page(request):
         )
     )
 
-    amount = 100  # ₹1 test
+    amount = 14900  # ₹1 test
 
     payment = client.order.create({
         "amount": amount,
@@ -699,7 +699,6 @@ def payment_page(request):
 @csrf_exempt
 def payment_success(request):
 
-    print("========== PAYMENT SUCCESS ==========")
 
     if request.method != "POST":
         return redirect("courses")
@@ -708,8 +707,6 @@ def payment_success(request):
     order_id = request.POST.get("razorpay_order_id")
     signature = request.POST.get("razorpay_signature")
 
-    print("Payment ID:", payment_id)
-    print("Order ID:", order_id)
 
     client = razorpay.Client(
         auth=(
@@ -733,8 +730,7 @@ def payment_success(request):
         course_id = payment_data["notes"]["course_id"]
         user_id = payment_data["notes"]["user_id"]
 
-        print("Course ID:", course_id)
-        print("User ID:", user_id)
+        
 
         user = User.objects.get(
             id=user_id
@@ -753,9 +749,6 @@ def payment_success(request):
         enrollment.payment_id = payment_id
         enrollment.order_id = order_id
         enrollment.save()
-
-        print("Enrollment Saved")
-        print("Paid:", enrollment.is_paid)
 
         return redirect(
             "course_lessons",

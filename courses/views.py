@@ -694,9 +694,12 @@ def payment_page(request):
         context
     )
 
-
 @csrf_exempt
 def payment_success(request):
+
+    print("========== PAYMENT SUCCESS ==========")
+    print("User:", request.user)
+    print("Authenticated:", request.user.is_authenticated)
 
     if request.method != "POST":
         return redirect("courses")
@@ -707,7 +710,12 @@ def payment_success(request):
 
     course_id = request.session.get("course_id")
 
+    print("Session Course ID:", course_id)
+    print("Payment ID:", payment_id)
+    print("Order ID:", order_id)
+
     if not course_id:
+        print("Course ID missing from session")
         return redirect("courses")
 
     course = get_object_or_404(
@@ -723,18 +731,22 @@ def payment_success(request):
     )
 
     try:
+
         client.utility.verify_payment_signature({
             "razorpay_order_id": order_id,
             "razorpay_payment_id": payment_id,
             "razorpay_signature": signature
         })
 
+        print("Signature verification successful")
+
     except Exception as e:
+
         print("PAYMENT VERIFICATION FAILED:", e)
 
-    return redirect(
-        f"/payment/?course_id={course.id}"
-    )
+        return redirect(
+            f"/checkout/?course_id={course.id}"
+        )
 
     enrollment, created = Enrollment.objects.get_or_create(
         user=request.user,
@@ -746,18 +758,15 @@ def payment_success(request):
     enrollment.order_id = order_id
     enrollment.save()
 
-    print("PAYMENT SUCCESS")
-    print("USER:", request.user.username)
-    print("COURSE:", course.title)
+    print("Enrollment Saved")
+    print("Paid:", enrollment.is_paid)
 
-    # IMPORTANT
     request.session.pop("course_id", None)
 
     return redirect(
         "course_lessons",
         course_id=course.id
     )
-
 # =========================
 # STATIC PAGES
 # =========================

@@ -84,7 +84,6 @@ def enroll_course(request, course_id):
 # =========================
 # COURSE LESSONS
 # =========================
-
 @login_required(login_url='login')
 def course_lessons(request, course_id):
 
@@ -99,6 +98,18 @@ def course_lessons(request, course_id):
     ).order_by('-is_paid', '-is_free_access')
 
     enrollment = enrollments.first()
+
+    print("========== COURSE LESSONS ==========")
+    print("User:", request.user.username)
+
+    if enrollment:
+        print("Enrollment ID:", enrollment.id)
+        print("Paid:", enrollment.is_paid)
+        print("Free Access:", enrollment.is_free_access)
+    else:
+        print("No Enrollment Found")
+
+    print("===================================")
 
     if not enrollment:
         return redirect('courses')
@@ -115,7 +126,9 @@ def course_lessons(request, course_id):
         and
         not enrollment.is_free_access
     ):
-        return redirect('payment_page')
+        return redirect(
+            f'/payment/?course_id={course.id}'
+        )
 
     days_passed = (
         date.today() - enrollment.enrolled_at
@@ -144,8 +157,7 @@ def course_lessons(request, course_id):
         'course_lessons.html',
         context
     )
-
-
+    
 # =========================
 # LESSON DETAIL
 # =========================
@@ -681,28 +693,23 @@ def payment_page(request):
         'payment.html',
         context
     )
+
+
 @csrf_exempt
 @login_required(login_url='login')
 def payment_success(request):
 
-    payment_id = request.POST.get(
-        'razorpay_payment_id'
-    )
+    if request.method != "POST":
+        return redirect("courses")
 
-    order_id = request.POST.get(
-        'razorpay_order_id'
-    )
+    payment_id = request.POST.get("razorpay_payment_id")
+    order_id = request.POST.get("razorpay_order_id")
+    signature = request.POST.get("razorpay_signature")
 
-    signature = request.POST.get(
-        'razorpay_signature'
-    )
-
-    course_id = request.session.get(
-        'course_id'
-    )
+    course_id = request.session.get("course_id")
 
     if not course_id:
-        return redirect('courses')
+        return redirect("courses")
 
     course = get_object_or_404(
         Course,
@@ -717,37 +724,38 @@ def payment_success(request):
     )
 
     try:
-
         client.utility.verify_payment_signature({
-            'razorpay_order_id': order_id,
-            'razorpay_payment_id': payment_id,
-            'razorpay_signature': signature
+            "razorpay_order_id": order_id,
+            "razorpay_payment_id": payment_id,
+            "razorpay_signature": signature
         })
 
-    except:
+    except Exception as e:
+        print("PAYMENT VERIFICATION FAILED:", e)
 
         return redirect(
-            f'/payment/?course_id={course.id}'
+            "payment_page"
         )
 
     enrollment, created = Enrollment.objects.get_or_create(
         user=request.user,
-        course=course,
-        defaults={
-            'is_paid': True,
-            'payment_id': payment_id,
-            'order_id': order_id
-        }
+        course=course
     )
 
-    if not created:
-        enrollment.is_paid = True
-        enrollment.payment_id = payment_id
-        enrollment.order_id = order_id
-        enrollment.save()
+    enrollment.is_paid = True
+    enrollment.payment_id = payment_id
+    enrollment.order_id = order_id
+    enrollment.save()
+
+    print("PAYMENT SUCCESS")
+    print("USER:", request.user.username)
+    print("COURSE:", course.title)
+
+    # IMPORTANT
+    request.session.pop("course_id", None)
 
     return redirect(
-        'course_lessons',
+        "course_lessons",
         course_id=course.id
     )
 

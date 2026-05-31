@@ -671,7 +671,7 @@ def payment_page(request):
         )
     )
 
-    amount = 14900
+    amount = 100
 
     payment = client.order.create({
         "amount": amount,

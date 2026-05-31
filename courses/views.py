@@ -157,7 +157,7 @@ def course_lessons(request, course_id):
         'course_lessons.html',
         context
     )
-    
+
 # =========================
 # LESSON DETAIL
 # =========================
@@ -731,11 +731,11 @@ def payment_success(request):
         })
 
     except Exception as e:
-        print("PAYMENT VERIFICATION FAILED:", e)
+    print("PAYMENT VERIFICATION FAILED:", e)
 
-        return redirect(
-            "payment_page"
-        )
+    return redirect(
+        f"/payment/?course_id={course.id}"
+    )
 
     enrollment, created = Enrollment.objects.get_or_create(
         user=request.user,

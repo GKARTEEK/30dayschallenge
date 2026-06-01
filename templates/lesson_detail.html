@@ -634,11 +634,34 @@
                         {% for quiz in quiz_questions %}
                         <div class="quiz-card">
                             <h3>Q{{ forloop.counter }}. {{ quiz.question }}</h3>
-                            <label><input type="radio" name="quiz_{{ quiz.id }}" value="{{ quiz.option1 }}"> {{ quiz.option1 }}</label>
-                            <label><input type="radio" name="quiz_{{ quiz.id }}" value="{{ quiz.option2 }}"> {{ quiz.option2 }}</label>
-                            <label><input type="radio" name="quiz_{{ quiz.id }}" value="{{ quiz.option3 }}"> {{ quiz.option3 }}</label>
-                            <label><input type="radio" name="quiz_{{ quiz.id }}" value="{{ quiz.option4 }}"> {{ quiz.option4 }}</label>
-                        </div>
+                            <label>
+    <input type="radio"
+           name="quiz_{{ quiz.id }}"
+           value="option1">
+    {{ quiz.option1 }}
+</label>
+
+<label>
+    <input type="radio"
+           name="quiz_{{ quiz.id }}"
+           value="option2">
+    {{ quiz.option2 }}
+</label>
+
+<label>
+    <input type="radio"
+           name="quiz_{{ quiz.id }}"
+           value="option3">
+    {{ quiz.option3 }}
+</label>
+
+<label>
+    <input type="radio"
+           name="quiz_{{ quiz.id }}"
+           value="option4">
+    {{ quiz.option4 }}
+</label>
+</div>
                         {% endfor %}
                         {% if not existing_attempt %}
                         <button type="submit" class="submit-btn">Submit Quiz</button>

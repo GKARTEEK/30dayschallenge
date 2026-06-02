@@ -24,7 +24,7 @@ class Course(models.Model):
 
     # COURSE PRICE
     price = models.IntegerField(
-        default=149
+        default=99
     )
 
     created_at = models.DateTimeField(

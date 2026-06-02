@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='price',
-            field=models.IntegerField(default=149),
+            field=models.IntegerField(default=99),
         ),
         migrations.AlterField(
             model_name='enrollment',
